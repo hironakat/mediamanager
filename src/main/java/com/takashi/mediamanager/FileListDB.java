@@ -26,7 +26,7 @@ public class FileListDB extends DBManager {
                 }
             }
             if (!fileinfoDBexist) {
-                st.executeUpdate("create table fileinfo(id bigint primary key, datetaken varchar(30), filesize bigint, filename varchar(32672), duplicate varchar(16), noPictureFile varchar(16), duplicateOrgFile varchar(32672), destination varchar(32672), destFileExist varchar(16))");
+                st.executeUpdate("create table fileinfo(id bigint primary key, datetaken varchar(30), filesize bigint, filename varchar(32672), duplicate varchar(16), noPictureFile varchar(16), duplicateOrgFile varchar(32672), destination varchar(32672), destFileExist varchar(16), fileCopied varchar(16))");
             }
         } catch (SQLException e) {
             Utils.errPrint(e);

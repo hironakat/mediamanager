@@ -1,7 +1,15 @@
 package com.takashi.mediamanager;
 
 
+import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.stream.Stream;
@@ -69,6 +77,25 @@ public class Main {
             System.out.println("setList " + Duration.between(start, finish).getSeconds() + "sec");
         }
         System.out.println("Total Files " + filelist.getNumberOfFiles() + " Non picture files "+ filelist.countNumberOfNonPictureFiles() + " Duplicate File "+ filelist.countNumberOfDuplicateFiles()+" File Copied "+ filelist.countNumberOfFileCopied());
+        BufferedInputStream bis = null;
+        BufferedWriter notpicturefileout = null;
+        try {
+            FileWriter notpicturefile = new FileWriter("D:\\filecount.txt", true); //true tells to append data.
+            notpicturefileout = new BufferedWriter(notpicturefile);
+            notpicturefileout.write("Total Files " + filelist.getNumberOfFiles() + " Non picture files "+ filelist.countNumberOfNonPictureFiles() + " Duplicate File "+ filelist.countNumberOfDuplicateFiles()+" File Copied "+ filelist.countNumberOfFileCopied()+"\r\n");
+        }catch(IOException e){
+            Utils.errPrint(e);
+        }finally{
+            if (notpicturefileout != null) {
+                try {
+                    notpicturefileout.close();
+                } catch (IOException e) {
+                    Utils.errPrint(e);
+                }
+            }
+        }
+
+
         listWindow.close();
         filelist.closeDB();
     }
