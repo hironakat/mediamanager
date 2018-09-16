@@ -33,19 +33,6 @@ public class FileInfo {
         nonDateDirName = null;
         fileCopied = false;
     }
-    public FileInfo(boolean dup){
-        dateTaken = LocalDateTime.MIN;
-        fileSize = Long.MIN_VALUE;
-        fileObj = null;
-        fileName = null;
-        duplicate = dup;
-        noPictureFile = false;
-        duplicateOrgFile = null;
-        destination = null;
-        destFileExist = false;
-        nonDateDirName = null;
-        fileCopied = false;
-    }
 
     protected void set(LocalDateTime date){ dateTaken = date;}
     protected void set(Long size){ fileSize = size;}
@@ -62,7 +49,6 @@ public class FileInfo {
     protected void setDestination(File des){destination = des;}
     protected void setDestFileExist(boolean flag){destFileExist = flag;}
     protected void setFileCopied(boolean flag){fileCopied = flag;}
-    //public void setNonDateDirName(String dirName){nonDateDirName = dirName;}
 
     public String getFilePath(){return fileObj.getPath();}
     public String getFileName(){return fileName;}

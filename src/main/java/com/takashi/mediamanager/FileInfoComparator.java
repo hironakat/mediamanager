@@ -36,7 +36,6 @@ public class FileInfoComparator implements Comparator<FileInfo> {
         if(returnvalue == 0){
             returnvalue= p1.getFileName().compareTo(p2.getFileName());
         }
-        //System.err. println(p1.getFileName()+" "+p2.getFileName()+" "+p1.getFileName().contains(" (1)")+" "+p2.getFileName().contains(" (1)"));
         return returnvalue;
     }
 }

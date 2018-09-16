@@ -29,7 +29,6 @@ public class FileListUtils extends FileList{
                 FileDateDupflag fileDateDupflag = new FileDateDupflag(fi.getDateTaken(), fi.getDuplicate(), fi.getNonDateDirName());
                 datelist.add(fileDateDupflag);
             }
-            //fi.setNonDateDirName(fileDateDupflag.getNonDateDirName());
         }
         Set<FileDateDupflag> hs = new HashSet<FileDateDupflag>();
         hs.addAll(datelist);
@@ -141,9 +140,6 @@ public class FileListUtils extends FileList{
                 File fileOut = new File(dirName+"\\"+originalFile.getFileName());
                 if(!fileOut.exists()) {
                     try {
-                        /*Path org = Paths.get(originalFile.getFileObj().getPath());
-                        Path dist = Paths.get(fileOut.getPath());
-                        java.nio.file.Files.move(org, dist);*/
                         FileChannel orgFile = new FileInputStream(originalFile.getFileObj()).getChannel();
                         FileChannel destFile = new FileOutputStream(fileOut).getChannel();
 
@@ -169,10 +165,6 @@ public class FileListUtils extends FileList{
                 File fileOut = new File(dirName+"\\"+originalFile.getFileName());
                 if(!fileOut.exists()) {
                     try {
-                        /*Path org = Paths.get(originalFile.getFileObj().getPath());
-                        Path dist = Paths.get(fileOut.getPath());
-                        java.nio.file.Files.move(org, dist);*/
-
                         FileChannel orgFile = new FileInputStream(originalFile.getFileObj()).getChannel();
                         FileChannel destFile = new FileOutputStream(fileOut).getChannel();
 
@@ -197,14 +189,11 @@ public class FileListUtils extends FileList{
 
     public DuplicateFileList setDuplicate(){
         DuplicateFileList duplicateList = new DuplicateFileList();
-        //int counter = 0;
         ListIterator<FileInfo> fileInfoIterator = filelist.listIterator(0);
-        //int dupNum = Collections.frequency(filelist, new FileInfo(true));
         while (fileInfoIterator.hasNext()) {
             FileInfo data = fileInfoIterator.next();
             if(data.getDuplicate()) {
                 duplicateList.add(data.getDuplicateOriginalFile().getPath(), data.getFilePath());
-                //counter++;
             }
         }
         return duplicateList;
@@ -227,76 +216,6 @@ public class FileListUtils extends FileList{
         });
         db.resetCounter();
         db.print();
-    }
-
-    public void mkDupdir(DuplicateFileList dupList){
-        ListIterator<FileInfo> fileInfoIterator = filelist.listIterator(0);
-        File dupDir = new File(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.DuplicateDir);
-        List<LocalDate> datelist = new ArrayList<LocalDate>();
-        if(dupDir.exists()){
-            while (fileInfoIterator.hasNext()) {
-                FileInfo data = fileInfoIterator.next();
-                if (data.getDuplicate()) {
-                    datelist.add(data.getDateTaken());
-                }
-            }
-
-            Set<LocalDate> hs = new HashSet<LocalDate>();
-            hs.addAll(datelist);
-            datelist.clear();
-            datelist.addAll(hs);
-            Iterator<LocalDate> dateListIterator = datelist.iterator();
-            while (dateListIterator.hasNext()) {
-                File dupDateDir;
-                if(dateListIterator.next().equals(LocalDate.MIN)){
-                    dupDateDir = Paths.get(dupDir.getPath(), "DateUnknown").toFile();
-                }else {
-                    dupDateDir = Paths.get(dupDir.getPath(), dateListIterator.next().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).toFile();
-                }
-                dupDateDir.mkdir();
-            }
-        }
-    }
-
-    public void fileDupCopy(DuplicateFileList dupList){
-        Iterator<FileInfo> fileInfoIterator = filelist.iterator();
-        String dirName;
-
-        while (fileInfoIterator.hasNext()) {
-            FileInfo originalFile = fileInfoIterator.next();
-            if (originalFile.getDuplicate()) {
-                LocalDate ld = originalFile.getDateTaken();
-                if(ld.equals(LocalDate.MIN)) {
-                    dirName = new String(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.DuplicateDir + "\\" + "DateUnknown");
-                } else {
-                    dirName = new String(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.DuplicateDir + "\\" + ld.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                }
-
-                File fileOut = new File(dirName+"\\"+originalFile.getFileName());
-                if(!fileOut.exists()) {
-                    try {
-                        /*Path org = Paths.get(originalFile.getFileObj().getPath());
-                        Path dist = Paths.get(fileOut.getPath());
-                        java.nio.file.Files.move(org, dist);*/
-                        FileChannel orgFile = new FileInputStream(originalFile.getFileObj()).getChannel();
-                        FileChannel destFile = new FileOutputStream(fileOut).getChannel();
-
-                        orgFile.transferTo(0, orgFile.size(), destFile);
-                        originalFile.setDestination(fileOut);
-                        destFile.close();
-                        orgFile.close();
-                    }catch(IOException e){
-                        Utils.errPrint(e);
-                    }
-                }else{
-                    //originalFile.setDestination(fileOut);
-                    originalFile.setDestFileExist(true);
-                }
-            }else if(!originalFile.getNonPictureFile() && originalFile.getDuplicate()){
-
-
-            }
-        }
     }
 
     public void getFromDB(){
