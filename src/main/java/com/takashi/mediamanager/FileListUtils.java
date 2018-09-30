@@ -145,6 +145,7 @@ public class FileListUtils extends FileList{
 
                         orgFile.transferTo(0, orgFile.size(), destFile);
                         originalFile.setDestination(fileOut);
+                        originalFile.setFileCopied(true);
                         destFile.close();
                         orgFile.close();
                     }catch(IOException e){
@@ -250,6 +251,10 @@ public class FileListUtils extends FileList{
 
     public long countNumberOfFileCopied(){
         return filelist.stream().filter(fl -> fl.getFileCopied()).count();
+    }
+
+    public long countNumberOfDestFileExist(){
+        return filelist.stream().filter(fl -> fl.getDestFileExist()).count();
     }
 
     public long getNumberOfFiles(){
