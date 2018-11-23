@@ -25,8 +25,10 @@ public class GetFileInfo {
             Utils.errPrint(e);
         }
 
-        if(!ifPictureFile(file)){
+        if(!ifPictureFile(file)) {
             returnValue.setNonPictureFile(true);
+        }else if(!ifVideoFile(file)){
+            returnValue.setNonVideoFile(true);
         }else {
             try {
                 Metadata metadata = ImageMetadataReader.readMetadata(file);
@@ -123,6 +125,49 @@ public class GetFileInfo {
         }
         return returnvalue;
     }
+
+    private boolean ifVideoFile(File file){
+        boolean returnvalue = false;
+
+        BufferedInputStream bis = null;
+        BufferedWriter notvideofileout = null;
+        try {
+            bis = new BufferedInputStream(new FileInputStream(file));
+            FileType fileType = FileTypeDetector.detectFileType(bis);
+            if (fileType == FileType.Avi ||
+                    fileType == FileType.Mov ||
+                    fileType == FileType.Mp4 ||
+                    fileType == FileType.Asf ||
+                    fileType == FileType.Flv ||
+                    fileType == FileType.Vob ||
+                    fileType == FileType.Arw ) {
+                returnvalue = true;
+            }
+
+            if(!returnvalue){
+                //System.err.println("not picture file "+file.getPath());
+                if(FileInfoTypes.OUTPUT_NON_VID_FILE_DEF) {
+                    FileWriter notpicturefile = new FileWriter(FileInfoTypes.OUTPUT_NON_VID_FILE_NAME, true); //true tells to append data.
+                    notvideofileout = new BufferedWriter(notpicturefile);
+                    notvideofileout.write(file.getPath() + "\r\n");
+                }
+            }
+        }catch(IOException e){
+            Utils.errPrint(file.toPath().toString(), e);
+        }finally{
+            if(FileInfoTypes.OUTPUT_NON_VID_FILE_DEF) {
+                if (notvideofileout != null) {
+                    try {
+                        notvideofileout.close();
+                    } catch (IOException e) {
+                        Utils.errPrint(e);
+                    }
+                }
+            }
+        }
+        return returnvalue;
+    }
+
     private LocalDateTime stringToDateTime(String datetime) {
         int index0, index1;
         int year = 0, month = 0, dayOfMonth = 0, hour = 0, minute = 0, second = 0;

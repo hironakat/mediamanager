@@ -14,6 +14,7 @@ public class FileInfo {
     private String fileName;
     private Boolean duplicate;
     private Boolean noPictureFile;
+    private Boolean noVideoFile;
     private File duplicateOrgFile;
     private File destination;
     private boolean destFileExist;
@@ -27,6 +28,7 @@ public class FileInfo {
         fileName = null;
         duplicate = false;
         noPictureFile = false;
+        noVideoFile = false;
         duplicateOrgFile = null;
         destination = null;
         destFileExist = false;
@@ -45,6 +47,7 @@ public class FileInfo {
     }
     protected void setDuplicate(boolean dup){duplicate = dup;}
     protected void setNonPictureFile(boolean dup){noPictureFile = dup;}
+    protected void setNonVideoFile(boolean dup){noVideoFile = dup;}
     protected void setDuplicateOriginalFile(File file){duplicateOrgFile = file;}
     protected void setDestination(File des){destination = des;}
     protected void setDestFileExist(boolean flag){destFileExist = flag;}

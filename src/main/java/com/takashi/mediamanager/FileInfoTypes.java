@@ -22,5 +22,7 @@ public class FileInfoTypes {
     public final static boolean OUTPUT_FILE_DUP_DEF = false;
     public final static String OUTPUT_DUPLICATE_FILE_NAME = "D:\\DuplicateFile.txt";
     public final static boolean OUTPUT_NON_PIC_FILE_DEF = false;
+    public final static boolean OUTPUT_NON_VID_FILE_DEF = true;
     public final static String OUTPUT_NON_PIC_FILE_NAME = "D:\\nonPictureFile.txt";
+    public final static String OUTPUT_NON_VID_FILE_NAME = "D:\\nonVideoFile.txt";
 }

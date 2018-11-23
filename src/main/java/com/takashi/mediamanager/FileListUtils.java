@@ -152,8 +152,29 @@ public class FileListUtils extends FileList{
                         Utils.errPrint(e);
                     }
                 }else{
-                    originalFile.setDestination(fileOut);
-                    originalFile.setDestFileExist(true);
+                    for(int i=1; i<9; i++){
+                        fileOut = new File(dirName+"\\"+addExtension(originalFile.getFileName(), i));
+                        if(!fileOut.exists()) {
+                            try {
+                                FileChannel orgFile = new FileInputStream(originalFile.getFileObj()).getChannel();
+                                FileChannel destFile = new FileOutputStream(fileOut).getChannel();
+
+                                orgFile.transferTo(0, orgFile.size(), destFile);
+                                originalFile.setDestination(fileOut);
+                                originalFile.setFileCopied(true);
+                                destFile.close();
+                                orgFile.close();
+                            } catch (IOException e) {
+                                Utils.errPrint(e);
+                            } finally {
+                                break;
+                            }
+                        }
+                    }
+                    if(!originalFile.getFileCopied()){
+                        originalFile.setDestination(fileOut);
+                        originalFile.setDestFileExist(true);
+                    }
                 }
             }else if (!originalFile.getNonPictureFile() && originalFile.getDuplicate()) {
                 LocalDate ld = originalFile.getDateTaken();
@@ -266,5 +287,15 @@ public class FileListUtils extends FileList{
             Utils.errPrint(e);
         }
         return numOfFiles;
+    }
+
+    private String addExtension(String filename, int i){
+        StringBuilder sb = new StringBuilder(filename);
+        int index = sb.lastIndexOf(".");
+        if(index > -1){
+            sb.insert(index, "_("+i+")");
+        }
+        return sb.toString();
+
     }
 }
