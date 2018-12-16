@@ -3,7 +3,7 @@ package com.takashi.mediamanager;
 public class FileInfoTypes {
     final static String Dir_EXIFIFD0 = "Exif IFD0";
     final static String Dir_SubIFD = "Exif SubIFD";
-    final static String fileInfoUri = "jdbc:derby:D:\\Users\\Takashi\\IdeaProjects\\test\\picturefiledb;create=true";
+    final static String fileInfoUri = "jdbc:derby:D:\\Users\\Takashi\\IdeaProjects\\mediamanager\\picturefiledb;create=true";
     final static String fileInfoTableName = "fileinfo";
     final static String versionTableName = "version";
     final static String queryFileinfo = "SELECT * FROM fileinfo";
@@ -12,8 +12,8 @@ public class FileInfoTypes {
 
     final static String Dir_FILE = "File";
 
-    final static String RootDir = "D:\\Users\\Takashi\\IdeaProjects\\test\\Pictures";
-    final static String OutputDir = "D:\\Users\\Takashi\\IdeaProjects\\test\\Output";
+    final static String RootDir = "D:\\Users\\Takashi\\IdeaProjects\\mediamanager\\Pictures";
+    final static String OutputDir = "D:\\Users\\Takashi\\IdeaProjects\\mediamanager\\Output";
     final static String DuplicateDir = "duplicate";
     final static String DateUnknownDir = "DateUnknown";
 
