@@ -14,13 +14,14 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.stream.Stream;
 
-public class Main {
+public class Main{
     public static void main(String[] args) {
         Stream<Path> fileList = Utils.findFiles(FileInfoTypes.RootDir);
 
         GetFileInfo getFileInfoObj = new GetFileInfo();
         FileListUtils filelist = new FileListUtils();
         LocalTime start;
+        LocalTime start2;
         LocalTime finish;
 
         start = LocalTime.now();
