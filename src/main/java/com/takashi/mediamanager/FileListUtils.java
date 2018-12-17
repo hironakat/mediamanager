@@ -20,7 +20,7 @@ public class FileListUtils extends FileList{
     }
 
 
-    public void mkdir (){
+    /*public void mkdir (){
         Iterator<FileInfo> fileInfoIterator = filelist.iterator();
         List<FileDateDupflag> datelist = new ArrayList<FileDateDupflag>();
         while (fileInfoIterator.hasNext()) {
@@ -39,9 +39,9 @@ public class FileListUtils extends FileList{
             FileDateDupflag fileDateDupFlag = dateListIterator.next();
             Utils.mkDateDir(fileDateDupFlag.getDate(), fileDateDupFlag.getDupFlag(), fileDateDupFlag.getNonDateDirName());
         }
-    }
+    }*/
 
-    public void duplicateCheck() {
+    /*public void duplicateCheck() {
         Collections.sort(filelist, new FileInfoComparator());
 
         BufferedWriter duplicatefileout = null;
@@ -102,6 +102,7 @@ public class FileListUtils extends FileList{
         fileInfoIterator = filelist.listIterator(0);
         while (fileInfoIterator.hasNext()) {
             FileInfo data = fileInfoIterator.next();
+
             if(data.getDuplicate()) {
                 //System.out.println(data.getFileName() + " " + data.getDuplicate() + " " + data.getNonPictureFile());
                 if (FileInfoTypes.OUTPUT_FILE_DUP_DEF) {
@@ -122,7 +123,37 @@ public class FileListUtils extends FileList{
                 }
             }
         }
+    }*/
+
+    public void duplicateCheck(FileListUtils filelist2, Utils util) {
+        Collections.sort(filelist, new FileInfoComparator());
+        ListIterator<FileInfo> fileInfoIterator1 = filelist.listIterator(0);
+        Collections.sort(filelist2.filelist, new FileInfoComparator());
+        ListIterator<FileInfo> fileInfoIterator2 = filelist2.filelist.listIterator(0);
+
+        ListIterator<FileInfo> fileInfoIteratorCheck;
+        List<String> targetFileNameVariation = new ArrayList<String>();
+
+        while (fileInfoIterator2.hasNext()) {
+            FileInfo targetFile = fileInfoIterator2.next();
+            while (fileInfoIterator1.hasNext()) {
+                FileInfo originalFile = fileInfoIterator1.next();
+                if (originalFile.getFileName().equals(targetFile.getFileName())) {
+                    try {
+                        if (Files.equal(originalFile.getFileObj(), targetFile.getFileObj())) {
+                            targetFile.setDuplicate(true);
+                            targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
+                            continue;
+                        }
+                    } catch (IOException e) {
+                        Utils.errPrint(e);
+                    }
+                }
+            }
+            util.printProgress("duplicateCheck");
+        }
     }
+
 
     public void fileCopy()  {
         Iterator<FileInfo> fileInfoIterator = filelist.iterator();
@@ -184,7 +215,7 @@ public class FileListUtils extends FileList{
                     originalFile.setDestFileExist(true);
                 }
             }
-            Utils.printProgress("fileCopy");
+            //Utils.printProgress("fileCopy");
         }
     }
 
@@ -237,6 +268,16 @@ public class FileListUtils extends FileList{
         });
     }
 
+    public void printDup(){
+        ListIterator<FileInfo> fileInfoIterator = filelist.listIterator(0);
+        FileListDB db = new FileListDB();
+        fileInfoIterator.forEachRemaining(filelist-> {
+            if(filelist.getDuplicate()) {
+                System.out.println(filelist.getDateTaken().toString() + " " + filelist.getFileName());
+            }
+        });
+    }
+
     public boolean getFileInfoDBexist(){
         return db.getFileInfoDBexist();
     }
@@ -260,7 +301,7 @@ public class FileListUtils extends FileList{
     public long getNumberOfFiles(){
         long numOfFiles = 0l;
         try {
-            Stream<Path> fileList = java.nio.file.Files.walk(Paths.get(FileInfoTypes.RootDir)).filter(java.nio.file.Files::isRegularFile);
+            Stream<Path> fileList = java.nio.file.Files.walk(Paths.get(FileInfoTypes.Dir1)).filter(java.nio.file.Files::isRegularFile);
             numOfFiles = fileList.count();
         } catch(IOException e){
             Utils.errPrint(e);

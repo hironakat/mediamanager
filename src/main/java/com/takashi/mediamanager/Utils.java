@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class Utils {
-    private static List<Path> formerPathList = new ArrayList<Path>();
-    private static long numOfFiles = -1, fileCount = 0/*, msgLen = 0*/;
-    private static String funcName = null;
-    private static String rootPath;
-    private static CountWindow cw = new CountWindow();
+    private  List<Path> formerPathList = new ArrayList<Path>();
+    private  long numOfFiles = -1, fileCount = 0/*, msgLen = 0*/;
+    private  String funcName = null;
+    private  String rootPath;
+    private  CountWindow cw = new CountWindow();
 
-    public static Stream<Path> findFiles(String path) {
+    public  Stream<Path> findFiles(String path) {
         Stream<Path> fileList = null;
         rootPath = path;
 
@@ -31,7 +31,7 @@ public class Utils {
         return fileList;
     }
 
-    public static void mkDateDir(LocalDate date, boolean dupFlag, String nonDateDirName) {
+    public  void mkDateDir(LocalDate date, boolean dupFlag, String nonDateDirName) {
         String folderName;
         String dirName;
         Path dupDir, dnDir;
@@ -79,7 +79,7 @@ public class Utils {
         }*/
     }
 
-    private static void mkDateDir(Path dir){
+    private  void mkDateDir(Path dir){
         if(!formerPathList.contains(dir)) {
             Iterator<Path> it = dir.iterator();
             String pathName = FileInfoTypes.OutputDir.substring(0, FileInfoTypes.OutputDir.indexOf(':') + 2);
@@ -108,7 +108,7 @@ public class Utils {
         e.printStackTrace();
     }
 
-    public static void printProgress(String str){
+    public  void printProgress(String str){
         if(funcName == null){
             funcName = str;
         } else if(!funcName.equalsIgnoreCase(str)){
@@ -131,7 +131,7 @@ public class Utils {
         fileCount++;
     }
 
-    private static int getNumOfFiles(String dirPath) {
+    private  int getNumOfFiles(String dirPath) {
         int count = 0;
         File f = new File(dirPath);
         File[] files = f.listFiles();
