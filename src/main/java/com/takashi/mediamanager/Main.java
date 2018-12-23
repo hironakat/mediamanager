@@ -22,8 +22,8 @@ public class Main{
         Stream<Path> fileList2 = util2.findFiles(FileInfoTypes.Dir2);
 
         GetFileInfo getFileInfoObj = new GetFileInfo();
-        FileListUtils filelist1 = new FileListUtils();
-        FileListUtils filelist2 = new FileListUtils();
+        FileListUtils filelistUtil1 = new FileListUtils();
+        FileListUtils filelistUtil2 = new FileListUtils();
         LocalTime start;
         LocalTime finish;
 
@@ -32,14 +32,14 @@ public class Main{
         fileList1.forEach(path -> {
             FileInfo fi = getFileInfoObj.getFileInfo(path.toAbsolutePath().toFile());
             if (fi != null) {
-                filelist1.add(fi);
+                filelistUtil1.add(fi);
             }
             util1.printProgress("FileList1");
         });
         fileList2.forEach(path -> {
             FileInfo fi = getFileInfoObj.getFileInfo(path.toAbsolutePath().toFile());
             if (fi != null) {
-                filelist2.add(fi);
+                filelistUtil2.add(fi);
             }
             util2.printProgress("FileList2");
         });
@@ -49,11 +49,11 @@ public class Main{
 
         start = LocalTime.now();
 
-        filelist1.duplicateCheck(filelist2, util2);
+        filelistUtil1.duplicateCheck(filelistUtil2, util2);
         finish = LocalTime.now();
         System.out.println("duplicateCheck " + Duration.between(start, finish).getSeconds() + "sec");
 
-        filelist2.printDup();
+        filelistUtil1.printDup();
 
 
 

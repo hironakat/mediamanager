@@ -17,7 +17,7 @@ public class Utils {
     private  long numOfFiles = -1, fileCount = 0/*, msgLen = 0*/;
     private  String funcName = null;
     private  String rootPath;
-    private  CountWindow cw = new CountWindow();
+    private  static CountWindow cw = new CountWindow();
 
     public  Stream<Path> findFiles(String path) {
         Stream<Path> fileList = null;

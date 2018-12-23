@@ -126,23 +126,31 @@ public class FileListUtils extends FileList{
     }*/
 
     public void duplicateCheck(FileListUtils filelist2, Utils util) {
-        Collections.sort(filelist, new FileInfoComparator());
-        ListIterator<FileInfo> fileInfoIterator1 = filelist.listIterator(0);
+        Collections.sort(this.filelist, new FileInfoComparator());
+        ListIterator<FileInfo> fileInfoIterator1 = this.filelist.listIterator(0);
         Collections.sort(filelist2.filelist, new FileInfoComparator());
         ListIterator<FileInfo> fileInfoIterator2 = filelist2.filelist.listIterator(0);
 
-        ListIterator<FileInfo> fileInfoIteratorCheck;
-        List<String> targetFileNameVariation = new ArrayList<String>();
+        //ListIterator<FileInfo> fileInfoIteratorCheck;
+       // List<String> targetFileNameVariation = new ArrayList<String>();
 
         while (fileInfoIterator2.hasNext()) {
             FileInfo targetFile = fileInfoIterator2.next();
             while (fileInfoIterator1.hasNext()) {
                 FileInfo originalFile = fileInfoIterator1.next();
+                String target = new String("DSC00087.JPG");
+                /*if(originalFile.getFileName().equals(target)){
+                    System.out.print("originalFile " + target+"\n");
+                }
+                if(targetFile.getFileName().equals(target)){
+                    System.out.print("targetFile " + target+"\n");
+                }*/
                 if (originalFile.getFileName().equals(targetFile.getFileName())) {
                     try {
                         if (Files.equal(originalFile.getFileObj(), targetFile.getFileObj())) {
                             targetFile.setDuplicate(true);
                             targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
+                            System.out.print("targetFile " + targetFile.getFilePath()+"\n");
                             continue;
                         }
                     } catch (IOException e) {
@@ -150,6 +158,8 @@ public class FileListUtils extends FileList{
                     }
                 }
             }
+            Collections.sort(this.filelist, new FileInfoComparator());
+            fileInfoIterator1 = this.filelist.listIterator(0);
             util.printProgress("duplicateCheck");
         }
     }
