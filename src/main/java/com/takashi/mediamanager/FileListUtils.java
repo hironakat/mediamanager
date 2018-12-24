@@ -133,6 +133,14 @@ public class FileListUtils extends FileList{
 
         //ListIterator<FileInfo> fileInfoIteratorCheck;
        // List<String> targetFileNameVariation = new ArrayList<String>();
+        BufferedWriter junkoDupfileout = null;
+
+        try {
+            FileWriter junkoduplicateFileOutput = new FileWriter("D:\\JunkoDup.txt", true); //true tells to append data.
+            junkoDupfileout = new BufferedWriter(junkoduplicateFileOutput);
+        } catch (IOException e) {
+            Utils.errPrint(e);
+        }
 
         while (fileInfoIterator2.hasNext()) {
             FileInfo targetFile = fileInfoIterator2.next();
@@ -151,6 +159,11 @@ public class FileListUtils extends FileList{
                             targetFile.setDuplicate(true);
                             targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
                             System.out.print("targetFile " + targetFile.getFilePath()+"\n");
+                            try {
+                                junkoDupfileout.write(targetFile.getFilePath() +"\r\n");
+                            } catch (IOException e) {
+                                Utils.errPrint(e);
+                            }
                             continue;
                         }
                     } catch (IOException e) {
@@ -161,6 +174,13 @@ public class FileListUtils extends FileList{
             Collections.sort(this.filelist, new FileInfoComparator());
             fileInfoIterator1 = this.filelist.listIterator(0);
             util.printProgress("duplicateCheck");
+        }
+        if (junkoDupfileout != null) {
+            try {
+                junkoDupfileout.close();
+            }catch(IOException e){
+                Utils.errPrint(e);
+            }
         }
     }
 
