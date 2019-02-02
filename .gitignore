@@ -37,8 +37,11 @@ ehthumbs.db
 Thumbs.db
 
 .idea
+<<<<<<< HEAD
 picturefiledb
 target
 mediamanager.iml
 test.iml
 derby.log
+=======
+>>>>>>> video files handling
