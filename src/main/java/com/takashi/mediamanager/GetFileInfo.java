@@ -25,9 +25,9 @@ public class GetFileInfo {
             Utils.errPrint(e);
         }
 
-        if(!ifPictureFile(file)) {
+        /*if(!ifPictureFile(file)) {
             returnValue.setNonPictureFile(true);
-        }else if(!ifVideoFile(file)){
+        }else*/ if(!ifVideoFile(file)){
             returnValue.setNonVideoFile(true);
         }else {
             try {
@@ -142,6 +142,21 @@ public class GetFileInfo {
                     fileType == FileType.Vob ||
                     fileType == FileType.Arw ) {
                 returnvalue = true;
+            } else{
+                String extension = "";
+                int i = file.getName().lastIndexOf('.');
+                if (i > 0) {
+                    extension = file.getName().substring(i+1);
+                    if(     extension.equalsIgnoreCase("wmv") ||
+                            extension.equalsIgnoreCase("mts") ||
+                            extension.equalsIgnoreCase("mpg") ||
+                            extension.equalsIgnoreCase("mp4") ||
+                            extension.equalsIgnoreCase("mov") ||
+                            extension.equalsIgnoreCase("avi") ||
+                            extension.equalsIgnoreCase("3g2")) {
+                        returnvalue = true;
+                    }
+                }
             }
 
             if(!returnvalue){

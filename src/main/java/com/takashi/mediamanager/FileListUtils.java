@@ -25,7 +25,7 @@ public class FileListUtils extends FileList{
         List<FileDateDupflag> datelist = new ArrayList<FileDateDupflag>();
         while (fileInfoIterator.hasNext()) {
             FileInfo fi = fileInfoIterator.next();
-            if(!fi.getNonPictureFile()) {
+            if(!fi.getNonPictureFile()||!fi.getNonVideoFile()) {
                 FileDateDupflag fileDateDupflag = new FileDateDupflag(fi.getDateTaken(), fi.getDuplicate(), fi.getNonDateDirName());
                 datelist.add(fileDateDupflag);
             }
@@ -52,7 +52,7 @@ public class FileListUtils extends FileList{
 
         while (fileInfoIterator.hasNext()) {
             FileInfo originalFile = fileInfoIterator.next();
-            if(!originalFile.getNonPictureFile()) {
+            if(!originalFile.getNonPictureFile()||!originalFile.getNonVideoFile()) {
                 fileInfoIteratorCheck = filelist.listIterator(fileInfoIterator.nextIndex());
                 fileInfoIteratorCheck.forEachRemaining(targetFile -> {
                     int pos = originalFile.getFileName().indexOf('.');
@@ -129,7 +129,8 @@ public class FileListUtils extends FileList{
         String dirName;
         while (fileInfoIterator.hasNext()) {
             FileInfo originalFile = fileInfoIterator.next();
-            if (!originalFile.getNonPictureFile() && !originalFile.getDuplicate()) {
+            if ((!originalFile.getNonPictureFile() && !originalFile.getDuplicate())||
+                    (!originalFile.getNonVideoFile() && !originalFile.getDuplicate())) {
                 LocalDate ld = originalFile.getDateTaken();
                 if(ld.equals(LocalDate.MIN)) {
                     dirName = new String(FileInfoTypes.OutputDir + "\\" + "DateUnknown"+"\\"+originalFile.getNonDateDirName());
@@ -176,7 +177,8 @@ public class FileListUtils extends FileList{
                         originalFile.setDestFileExist(true);
                     }
                 }
-            }else if (!originalFile.getNonPictureFile() && originalFile.getDuplicate()) {
+            }else if ((!originalFile.getNonPictureFile() && originalFile.getDuplicate())||
+                    (!originalFile.getNonVideoFile() && originalFile.getDuplicate())) {
                 LocalDate ld = originalFile.getDateTaken();
                 if(ld.equals(LocalDate.MIN)) {
                     dirName = new String(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.DuplicateDir + "\\" + "DateUnknown"+"\\"+originalFile.getNonDateDirName());
@@ -264,6 +266,9 @@ public class FileListUtils extends FileList{
 
     public long countNumberOfNonPictureFiles(){
         return filelist.stream().filter(fl -> fl.getNonPictureFile()).count();
+    }
+    public long countNumberOfNonVideoFiles(){
+        return filelist.stream().filter(fl -> fl.getNonVideoFile()).count();
     }
 
     public long countNumberOfDuplicateFiles(){

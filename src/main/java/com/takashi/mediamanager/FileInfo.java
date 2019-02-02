@@ -61,6 +61,7 @@ public class FileInfo {
     public long getFileSize(){ return fileSize.longValue();}
     public Boolean getDuplicate(){ return duplicate; }
     public Boolean getNonPictureFile(){ return noPictureFile; }
+    public Boolean getNonVideoFile(){ return noVideoFile; }
     public File getDuplicateOriginalFile(){return duplicateOrgFile;}
     public File getDestinationFile(){return destination;}
     public Boolean getDestFileExist(){return destFileExist;}

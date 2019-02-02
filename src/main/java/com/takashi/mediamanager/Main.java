@@ -77,12 +77,17 @@ public class Main {
             System.out.println("setList " + Duration.between(start, finish).getSeconds() + "sec");
         }
         System.out.println("Total Files " + filelist.getNumberOfFiles() + " Non picture files "+ filelist.countNumberOfNonPictureFiles() + " Duplicate File "+ filelist.countNumberOfDuplicateFiles()+" File Copied "+ filelist.countNumberOfFileCopied()+"Destination File Exist "+filelist.countNumberOfDestFileExist());
+        System.out.println("Total Files " + filelist.getNumberOfFiles() + " Non video files "+ filelist.countNumberOfNonVideoFiles() + " Duplicate File "+ filelist.countNumberOfDuplicateFiles()+" File Copied "+ filelist.countNumberOfFileCopied()+"Destination File Exist "+filelist.countNumberOfDestFileExist());
+
+
         //BufferedInputStream bis = null;
         BufferedWriter notpicturefileout = null;
         try {
             FileWriter notpicturefile = new FileWriter("D:\\filecount.txt", true); //true tells to append data.
             notpicturefileout = new BufferedWriter(notpicturefile);
             notpicturefileout.write("Total Files " + filelist.getNumberOfFiles() + " Non picture files "+ filelist.countNumberOfNonPictureFiles() + " Duplicate File "+ filelist.countNumberOfDuplicateFiles()+" File Copied "+ filelist.countNumberOfFileCopied()+"Destination File Exist "+filelist.countNumberOfDestFileExist()+"\r\n");
+            notpicturefileout.write("Total Files " + filelist.getNumberOfFiles() + " Non video files "+ filelist.countNumberOfNonVideoFiles() + " Duplicate File "+ filelist.countNumberOfDuplicateFiles()+" File Copied "+ filelist.countNumberOfFileCopied()+"Destination File Exist "+filelist.countNumberOfDestFileExist()+"\r\n");
+
         }catch(IOException e){
             Utils.errPrint(e);
         }finally{
