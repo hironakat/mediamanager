@@ -37,3 +37,8 @@ ehthumbs.db
 Thumbs.db
 
 .idea
+picturefiledb
+target
+mediamanager.iml
+test.iml
+derby.log
