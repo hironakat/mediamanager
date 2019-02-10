@@ -1,5 +1,9 @@
 package com.takashi.mediamanager;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 
 public class DBManager {
@@ -9,6 +13,7 @@ public class DBManager {
     private Boolean versionDBexist = false;
 
     public DBManager() {
+        cleanDB();
         try {
             if(conn == null){
                 conn = DriverManager.getConnection(FileInfoTypes.fileInfoUri);
@@ -50,6 +55,16 @@ public class DBManager {
         } catch (SQLException e) {
             Utils.errPrint(e);
         }
+    }
+
+    private void cleanDB(){
+        File folder = new File("D:\\Users\\Takashi\\IdeaProjects\\mediamanager\\picturefiledb");
+        try {
+            FileUtils.cleanDirectory(folder);
+        }catch(IOException e){
+            Utils.errPrint(e);
+        }
+        folder.delete();
     }
 
 

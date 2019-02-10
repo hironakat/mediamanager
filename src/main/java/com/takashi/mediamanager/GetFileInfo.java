@@ -12,6 +12,7 @@ import com.drew.metadata.file.FileSystemDirectory;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 
 public class GetFileInfo {
@@ -35,8 +36,8 @@ public class GetFileInfo {
                 Iterable<Directory> dir = metadata.getDirectories();
 
                 for (Directory i : dir) {
-                    if (FileInfoTypes.Dir_EXIFIFD0.equals(i.getName())) {
-                        givenParam = i.getString(ExifDirectoryBase.TAG_DATETIME);
+                    if (FileInfoTypes.Dir_SubIFD.equals(i.getName())) {
+                        givenParam = i.getString(ExifDirectoryBase.TAG_DATETIME_ORIGINAL);
                         if (givenParam != null) {
                             returnValue.set(stringToDateTime(givenParam));
                         } else {
@@ -44,7 +45,7 @@ public class GetFileInfo {
                         }
                         //returnValue.set(stringToDateTime(i.getString(ExifDirectoryBase.TAG_DATETIME)));
                     }
-                    if (FileInfoTypes.Dir_SubIFD.equals(i.getName())){
+                    /*if (FileInfoTypes.Dir_SubIFD.equals(i.getName())){
                         if(returnValue.getDateTaken().equals(LocalDate.MIN)){
                             givenParam = i.getString(ExifDirectoryBase.TAG_DATETIME_ORIGINAL);
                             if (givenParam != null) {
@@ -53,7 +54,7 @@ public class GetFileInfo {
                                 returnValue.set(stringToDateTime("-999999999:01:01 0:0:0"));
                             }
                         }
-                    }
+                    }*/
                     if (FileInfoTypes.Dir_FILE.equals(i.getName())) {
                         givenParam = i.getString(FileSystemDirectory.TAG_FILE_SIZE);
                         returnValue.set(Long.valueOf(givenParam));
