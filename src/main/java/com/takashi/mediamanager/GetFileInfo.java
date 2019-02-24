@@ -8,6 +8,7 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.file.FileSystemDirectory;
+import com.drew.metadata.mp4.Mp4Directory;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -37,10 +38,11 @@ public class GetFileInfo {
                 Iterable<Directory> dir = metadata.getDirectories();
 
                 for (Directory i : dir) {
-                    if (FileInfoTypes.Dir_SubIFD.equals(i.getName())) {
-                        givenParam = i.getString(ExifDirectoryBase.TAG_DATETIME_ORIGINAL);
+                    if (FileInfoTypes.Dir_MP4.equals(i.getName())) {
+                        givenParam = i.getString(Mp4Directory.TAG_CREATION_TIME);
                         if (givenParam != null) {
-                            returnValue.set(stringToDateTime(givenParam));
+                            givenParam = "Sun Feb 17 21:42:14 PST 2019";
+                            returnValue.set(stringToDateTimeMP4(givenParam));
                         } else {
                             returnValue.set(stringToDateTime("-999999999:01:01 0:0:0"));
                         }
@@ -248,6 +250,134 @@ public class GetFileInfo {
 
         }
         return LocalDateTime.of(year, month, dayOfMonth, hour, minute, second);
+    }
+
+    private LocalDateTime stringToDateTimeMP4(String datetime) {
+        int index0, index1;
+        int year = 0, month = 0, dayOfMonth = 0, hour = 0, minute = 0, second = 0;
+        char dateDelimiter;
+        //System.out.print(datetime.indexOf(':'));
+        //dateDelimiter = checkDateDelimiter(datetime);
+        dateDelimiter = ' ';
+        try{
+            if(dateDelimiter ==  Character.MIN_VALUE){
+                throw new FileInfoException("EXCEPTION dateTime no delimiter " + datetime+"\n");
+            }
+            //Sun Feb 17 21:42:14 PST 2019
+            index0 = datetime.indexOf(dateDelimiter);
+            index1 = datetime.indexOf(dateDelimiter, index0 + 1);
+            if(index1 == -1){
+                throw new FileInfoException("EXCEPTION dateTime no delimiter " + datetime+"\n");
+            }
+            month = strToIntMonth(datetime.substring(index0 + 1, index1));
+            //year = Integer.parseInt(datetime.substring(0, index0));
+
+
+            index0 = index1;
+            index1 = datetime.indexOf(dateDelimiter, index0 + 1);
+            if (index1 == -1){
+                throw new FileInfoException("EXCEPTION dateTime no delimiter between date and time " + datetime+"\n");
+            }
+            dayOfMonth = Integer.parseInt(datetime.substring(index0 + 1, index1));
+
+            index0 = index1;
+            index1 = datetime.indexOf(':', index0 + 1);
+            if(index1 == -1){
+                throw new FileInfoException("EXCEPTION dateTime no delimiter " + datetime+"\n");
+            }
+            hour = Integer.parseInt(datetime.substring(index0 + 1, index1));
+
+            index0 = index1;
+            index1 = datetime.indexOf(':', index0 + 1);
+            if(index1 == -1){
+                throw new FileInfoException("EXCEPTION dateTime no delimiter " + datetime+"\n");
+            }
+            minute = Integer.parseInt(datetime.substring(index0 + 1, index1));
+
+            index0 = index1;
+            index1 = datetime.indexOf(dateDelimiter, index0 + 1);
+            if(index1 == -1){
+                throw new FileInfoException("EXCEPTION dateTime no delimiter " + datetime+"\n");
+            }
+            second = Integer.parseInt(datetime.substring(index0 + 1, index1));
+
+            index0 = index1;
+            index1 = datetime.indexOf(dateDelimiter, index0 + 1);
+            String tmp = datetime.substring(index1 + 1);
+            year = Integer.parseInt(datetime.substring(index1 + 1));
+
+
+            //System.out.print(year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second + "\n");
+        } catch (IndexOutOfBoundsException e) {
+            Utils.errPrint("stringToDateTime "+datetime+" "+year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second, e);
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            Utils.errPrint("stringToDateTime "+datetime, e);
+            e.printStackTrace();
+        } catch (FileInfoException e) {
+            Utils.errPrint("stringToDateTime "+datetime, e);
+            e.printStackTrace();
+        }
+        if(month<1 || month >12 ||
+                dayOfMonth<1 ||dayOfMonth>31||
+                hour<0||hour>23||
+                minute<0||minute>59||
+                second<0||second>59){
+            //System.err. print("stringToDateTime "+year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second+"\n");
+            year = -999999999;
+            month = 1;
+            dayOfMonth = 1;
+            hour = 0;
+            minute = 0;
+            second = 0;
+
+        }
+        return LocalDateTime.of(year, month, dayOfMonth, hour, minute, second);
+    }
+
+    private int strToIntMonth(String month){
+        int returnvalue = 0;
+        switch (month) {
+            case "Jan":
+                returnvalue = 1;
+                break;
+            case "Feb":
+                returnvalue = 2;
+                break;
+            case "Mar":
+                returnvalue = 3;
+                break;
+            case "Apr":
+                returnvalue = 4;
+                break;
+            case "May":
+                returnvalue = 5;
+                break;
+            case "Jun":
+                returnvalue = 6;
+                break;
+            case "Jul":
+                returnvalue = 7;
+                break;
+            case "Aug":
+                returnvalue = 8;
+                break;
+            case "Sep":
+                returnvalue = 9;
+                break;
+            case "Oct":
+                returnvalue = 10;
+                break;
+            case "Nov":
+                returnvalue = 11;
+                break;
+            case "Dec":
+                returnvalue = 12;
+                break;
+            default:
+                System.out.println("エラー");
+        }
+        return returnvalue;
     }
 
     private char checkDateDelimiter(String dateTime){

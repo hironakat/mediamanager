@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 
+import static com.takashi.mediamanager.FileInfoTypes.db_dir;
+
 public class DBManager {
     protected static Connection conn = null;
     private Statement st = null;
@@ -58,13 +60,15 @@ public class DBManager {
     }
 
     private void cleanDB(){
-        File folder = new File("D:\\Users\\Takashi\\IdeaProjects\\mediamanager\\picturefiledb");
-        try {
-            FileUtils.cleanDirectory(folder);
-        }catch(IOException e){
-            Utils.errPrint(e);
+        File folder = new File(db_dir);
+        if(folder.exists()) {
+            try {
+                FileUtils.cleanDirectory(folder);
+            } catch (IOException e) {
+                Utils.errPrint(e);
+            }
+            folder.delete();
         }
-        folder.delete();
     }
 
 }
