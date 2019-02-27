@@ -4,6 +4,9 @@ public class FileInfoTypes {
     final static String Dir_EXIFIFD0 = "Exif IFD0";
     final static String Dir_SubIFD = "Exif SubIFD";
     final static String Dir_MP4 = "MP4";
+    final static String Dir_QUICKTIME = "QuickTime";
+    final static String Dir_AVI = "AVI";
+    final static String Dir_FILE = "File";
     final static String db_dir = "D:\\Users\\Takashi\\IdeaProjects\\test\\picturefiledb";
     final static String fileInfoUri = "jdbc:derby:"+db_dir+";create=true";
     final static String fileInfoTableName = "fileinfo";
@@ -12,9 +15,7 @@ public class FileInfoTypes {
     final static String querydbVer = "SELECT ver FROM version WHERE id = 0";
     final static String queryDupDBinfo = "SELECT * FROM dupinfo";
 
-    final static String Dir_FILE = "File";
-
-    final static String RootDir = "D:\\Videos\\2019-02-17";
+    final static String RootDir = "D:\\tmp";
     final static String OutputDir = "D:\\Output";
     final static String DuplicateDir = "duplicate";
     final static String DateUnknownDir = "DateUnknown";

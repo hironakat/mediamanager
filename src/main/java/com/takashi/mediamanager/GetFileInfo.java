@@ -9,10 +9,13 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.file.FileSystemDirectory;
 import com.drew.metadata.mp4.Mp4Directory;
+import com.drew.metadata.mov.QuickTimeDirectory;
+import com.drew.metadata.file.FileSystemDirectory;
 
 import java.io.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 
 public class GetFileInfo {
@@ -32,41 +35,39 @@ public class GetFileInfo {
             returnValue.setNonVideoFile(true);
         }else {
             try {
+                String givenParam = null;
+                String format = null;
+                returnValue.set(LocalDateTime.ofInstant(Instant.ofEpochMilli(file.lastModified()), ZoneId.systemDefault()));
+
                 Metadata metadata = ImageMetadataReader.readMetadata(file);
-                String givenParam;
                 //print(metadata, "Using ImageMetadataReader");
                 Iterable<Directory> dir = metadata.getDirectories();
-
                 for (Directory i : dir) {
-                    if (FileInfoTypes.Dir_MP4.equals(i.getName())) {
-                        givenParam = i.getString(Mp4Directory.TAG_CREATION_TIME);
-                        if (givenParam != null) {
-                            givenParam = "Sun Feb 17 21:42:14 PST 2019";
-                            returnValue.set(stringToDateTimeMP4(givenParam));
-                        } else {
-                            returnValue.set(stringToDateTime("-999999999:01:01 0:0:0"));
+                    switch(i.getName()){
+                        case FileInfoTypes.Dir_MP4:{
+                            givenParam = i.getString(Mp4Directory.TAG_CREATION_TIME);
+                            // Mon Feb 18 05:42:24 PST 2019
+                            format = "EEE MMM dd HH:mm:ss z yyyy";
+                            break;
                         }
-                        //returnValue.set(stringToDateTime(i.getString(ExifDirectoryBase.TAG_DATETIME)));
+                        case FileInfoTypes.Dir_QUICKTIME:{
+                            givenParam = i.getString(QuickTimeDirectory.TAG_CREATION_TIME);
+                            //Sun Nov 11 03:10:06 -08:00 2018
+                            format = "EEE MMM dd HH:mm:ss z yyyy";
+                            break;
+                        }
+                        case FileInfoTypes.Dir_FILE:{
+                            givenParam = i.getString(FileSystemDirectory.TAG_FILE_MODIFIED_DATE);
+                            //Fri Jan 30 19:43:51 -08:00 2015
+                            format = "EEE MMM dd HH:mm:ss z yyyy";
+                            break;
+                        }
                     }
-                    /*if (FileInfoTypes.Dir_SubIFD.equals(i.getName())){
-                        if(returnValue.getDateTaken().equals(LocalDate.MIN)){
-                            givenParam = i.getString(ExifDirectoryBase.TAG_DATETIME_ORIGINAL);
-                            if (givenParam != null) {
-                                returnValue.set(stringToDateTime(givenParam));
-                            } else {
-                                returnValue.set(stringToDateTime("-999999999:01:01 0:0:0"));
-                            }
-                        }
-                    }*/
-                    if (FileInfoTypes.Dir_FILE.equals(i.getName())) {
-                        givenParam = i.getString(FileSystemDirectory.TAG_FILE_SIZE);
-                        returnValue.set(Long.valueOf(givenParam));
-                        //returnValue.set(Long.valueOf(i.getString(FileSystemDirectory.TAG_FILE_SIZE)));
-                        try {
-                            returnValue.set(file);
-                        } catch (FileInfoException e) {
-                            Utils.errPrint(e);
-                        }
+                    if (givenParam != null) {
+                        returnValue.set(stringToDateTimeMP4(givenParam, format));
+                        break;
+                    } else {
+                        returnValue.set(stringToDateTime("-999999999:01:01 0:0:0"));
                     }
                 }
             } catch (ImageProcessingException e) {
@@ -252,8 +253,9 @@ public class GetFileInfo {
         return LocalDateTime.of(year, month, dayOfMonth, hour, minute, second);
     }
 
-    private LocalDateTime stringToDateTimeMP4(String datetime) {
-        int index0, index1;
+    private LocalDateTime stringToDateTimeMP4(String datetime, String format) {
+        return LocalDateTime.parse(datetime.subSequence(0,datetime.length()),  DateTimeFormatter.ofPattern(format));
+        /*int index0, index1;
         int year = 0, month = 0, dayOfMonth = 0, hour = 0, minute = 0, second = 0;
         char dateDelimiter;
         //System.out.print(datetime.indexOf(':'));
@@ -276,7 +278,7 @@ public class GetFileInfo {
             index0 = index1;
             index1 = datetime.indexOf(dateDelimiter, index0 + 1);
             if (index1 == -1){
-                throw new FileInfoException("EXCEPTION dateTime no delimiter between date and time " + datetime+"\n");
+                throw new FileInfoException("EXCEPTION dateTime no delimiter dateTime " + datetime+"\n");
             }
             dayOfMonth = Integer.parseInt(datetime.substring(index0 + 1, index1));
 
@@ -307,7 +309,7 @@ public class GetFileInfo {
             year = Integer.parseInt(datetime.substring(index1 + 1));
 
 
-            //System.out.print(year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second + "\n");
+            System.out.print(year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second + "\n");
         } catch (IndexOutOfBoundsException e) {
             Utils.errPrint("stringToDateTime "+datetime+" "+year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second, e);
             e.printStackTrace();
@@ -332,7 +334,7 @@ public class GetFileInfo {
             second = 0;
 
         }
-        return LocalDateTime.of(year, month, dayOfMonth, hour, minute, second);
+        return LocalDateTime.of(year, month, dayOfMonth, hour, minute, second);*/
     }
 
     private int strToIntMonth(String month){
