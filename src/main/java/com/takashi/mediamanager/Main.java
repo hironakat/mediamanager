@@ -36,6 +36,7 @@ public class Main {
             finish = LocalTime.now();
             System.out.println("FileList " + Duration.between(start, finish).getSeconds() + "sec");
         }
+        filelistUtils.setTHMDate();
 
         start = LocalTime.now();
         if (!filelistUtils.getFileInfoDBexist()){

@@ -7,6 +7,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Stream;
@@ -303,6 +304,26 @@ public class FileListUtils extends FileList{
             Utils.errPrint(e);
         }
         return numOfFiles;
+    }
+
+    public void setTHMDate(){
+        Iterator<FileInfo> fileInfoIterator = filelist.iterator();
+        Iterator<FileInfo> aviFileInfoIterator = filelist.iterator();
+        String filename, path;
+        while (fileInfoIterator.hasNext()) {
+            FileInfo fi = fileInfoIterator.next();
+            if (fi.getThm()) {
+                filename = fi.getFileName().substring(0,fi.getFileName().lastIndexOf('.'));
+                path = fi.getFilePath().substring(0,fi.getFilePath().lastIndexOf('\\'));
+                path = path + '\\' + filename + ".AVI";
+                while (aviFileInfoIterator.hasNext()) {
+                    FileInfo aviFi = aviFileInfoIterator.next();
+                    if(aviFi.getFilePath().equalsIgnoreCase(path)){
+                        aviFi.set(fi.getDateTimeTakenLTD());
+                    }
+                }
+            }
+        }
     }
 
     private String addExtension(String filename, int i){

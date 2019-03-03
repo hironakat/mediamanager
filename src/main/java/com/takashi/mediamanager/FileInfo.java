@@ -20,6 +20,7 @@ public class FileInfo {
     private boolean destFileExist;
     private boolean fileCopied;
     private String nonDateDirName;
+    private boolean thm;
 
     public FileInfo(){
         dateTaken = LocalDateTime.MIN;
@@ -34,6 +35,7 @@ public class FileInfo {
         destFileExist = false;
         nonDateDirName = null;
         fileCopied = false;
+        thm = false;
     }
 
     protected void set(LocalDateTime date){ dateTaken = date;}
@@ -52,12 +54,14 @@ public class FileInfo {
     protected void setDestination(File des){destination = des;}
     protected void setDestFileExist(boolean flag){destFileExist = flag;}
     protected void setFileCopied(boolean flag){fileCopied = flag;}
+    protected void setThm(boolean flag){thm = flag;}
 
     public String getFilePath(){return fileObj.getPath();}
     public String getFileName(){return fileName;}
     public File getFileObj(){return fileObj;}
     public String getDateTimeTaken(){return dateTaken.toString();}
     public LocalDate getDateTaken(){return dateTaken.toLocalDate();}
+    public LocalDateTime getDateTimeTakenLTD(){return dateTaken;}
     public long getFileSize(){ return fileSize.longValue();}
     public Boolean getDuplicate(){ return duplicate; }
     public Boolean getNonPictureFile(){ return noPictureFile; }
@@ -67,6 +71,7 @@ public class FileInfo {
     public Boolean getDestFileExist(){return destFileExist;}
     public String getNonDateDirName(){return nonDateDirName;}
     public Boolean getFileCopied(){return fileCopied;}
+    public Boolean getThm(){return thm;}
 
     public void checkValues(){
         if(dateTaken == null){

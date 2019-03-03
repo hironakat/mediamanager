@@ -4,6 +4,7 @@ public class FileInfoTypes {
     final static String Dir_EXIFIFD0 = "Exif IFD0";
     final static String Dir_SubIFD = "Exif SubIFD";
     final static String Dir_MP4 = "MP4";
+    final static String Dir_JPEG = "Jpeg";
     final static String Dir_QUICKTIME = "QuickTime";
     final static String Dir_AVI = "AVI";
     final static String Dir_FILE = "File";

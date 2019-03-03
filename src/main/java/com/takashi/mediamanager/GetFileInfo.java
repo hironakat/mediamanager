@@ -32,8 +32,10 @@ public class GetFileInfo {
         /*if(!ifPictureFile(file)) {
             returnValue.setNonPictureFile(true);
         }else*/ if(!ifVideoFile(file)) {
+            System.err.println(" no video file file name : "+file.toString());
             returnValue.setNonVideoFile(true);
         }else {
+            System.err.println("file name : "+file.toString());
             returnValue.setNonVideoFile(false);
             try {
                 String givenParam = null;
@@ -61,6 +63,19 @@ public class GetFileInfo {
                             givenParam = i.getString(FileSystemDirectory.TAG_FILE_MODIFIED_DATE);
                             //Fri Jan 30 19:43:51 -08:00 2015
                             format = "EEE MMM dd HH:mm:ss z yyyy";
+                            break;
+                        }
+                        case FileInfoTypes.Dir_SubIFD:{
+                            int place = file.getName().lastIndexOf('.');
+                            if (place > 0) {
+                                if (file.getName().substring(place + 1).equalsIgnoreCase("THM")) {
+                                    givenParam = i.getString(ExifDirectoryBase.TAG_DATETIME_ORIGINAL);
+                                    if (givenParam != null) {
+                                        format = "yyyy:MM:dd HH:mm:ss";
+                                        returnValue.setThm(true);
+                                    }
+                                }
+                            }
                             break;
                         }
                     }
@@ -160,6 +175,7 @@ public class GetFileInfo {
                             extension.equalsIgnoreCase("3gp") ||
                             extension.equalsIgnoreCase("m2ts") ||
                             extension.equalsIgnoreCase("ts") ||
+                            extension.equalsIgnoreCase("THM") ||
                             extension.equalsIgnoreCase("3g2")) {
                         returnvalue = true;
                     }
