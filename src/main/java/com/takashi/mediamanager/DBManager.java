@@ -59,12 +59,14 @@ public class DBManager {
 
     private void cleanDB(){
         File folder = new File("D:\\Users\\Takashi\\IdeaProjects\\mediamanager\\picturefiledb");
-        try {
-            FileUtils.cleanDirectory(folder);
-        }catch(IOException e){
-            Utils.errPrint(e);
+        if(folder.exists()) {
+            try {
+                FileUtils.cleanDirectory(folder);
+            } catch (IOException e) {
+                Utils.errPrint(e);
+            }
+            folder.delete();
         }
-        folder.delete();
     }
 
 
