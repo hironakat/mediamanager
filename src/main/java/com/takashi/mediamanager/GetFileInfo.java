@@ -31,9 +31,10 @@ public class GetFileInfo {
 
         /*if(!ifPictureFile(file)) {
             returnValue.setNonPictureFile(true);
-        }else*/ if(!ifVideoFile(file)){
+        }else*/ if(!ifVideoFile(file)) {
             returnValue.setNonVideoFile(true);
         }else {
+            returnValue.setNonVideoFile(false);
             try {
                 String givenParam = null;
                 String format = null;
@@ -156,6 +157,9 @@ public class GetFileInfo {
                             extension.equalsIgnoreCase("mp4") ||
                             extension.equalsIgnoreCase("mov") ||
                             extension.equalsIgnoreCase("avi") ||
+                            extension.equalsIgnoreCase("3gp") ||
+                            extension.equalsIgnoreCase("m2ts") ||
+                            extension.equalsIgnoreCase("ts") ||
                             extension.equalsIgnoreCase("3g2")) {
                         returnvalue = true;
                     }
@@ -163,7 +167,7 @@ public class GetFileInfo {
             }
 
             if(!returnvalue){
-                //System.err.println("not picture file "+file.getPath());
+                //System.err.println("not video file "+file.getPath());
                 if(FileInfoTypes.OUTPUT_NON_VID_FILE_DEF) {
                     FileWriter notpicturefile = new FileWriter(FileInfoTypes.OUTPUT_NON_VID_FILE_NAME, true); //true tells to append data.
                     notvideofileout = new BufferedWriter(notpicturefile);

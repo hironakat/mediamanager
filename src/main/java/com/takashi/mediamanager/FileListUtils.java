@@ -48,14 +48,25 @@ public class FileListUtils extends FileList{
 
         ListIterator<FileInfo> fileInfoIterator = filelist.listIterator(0);
         ListIterator<FileInfo> fileInfoIteratorCheck;
-        List<String> targetFileNameVariation = new ArrayList<String>();
+        //List<String> targetFileNameVariation = new ArrayList<String>();
 
         while (fileInfoIterator.hasNext()) {
             FileInfo originalFile = fileInfoIterator.next();
             if(!originalFile.getNonPictureFile()||!originalFile.getNonVideoFile()) {
                 fileInfoIteratorCheck = filelist.listIterator(fileInfoIterator.nextIndex());
                 fileInfoIteratorCheck.forEachRemaining(targetFile -> {
-                    int pos = originalFile.getFileName().indexOf('.');
+                    if(originalFile.getFileSize() == targetFile.getFileSize()){
+                        try {
+                            if (Files.equal(originalFile.getFileObj(), targetFile.getFileObj())) {
+                                targetFile.setDuplicate(true);
+                                targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
+                            }
+                        } catch (IOException e) {
+                            Utils.errPrint(e);
+                        }
+                    }
+
+                    /*int pos = originalFile.getFileName().indexOf('.');
                     StringBuilder sborg = new StringBuilder(originalFile.getFileName());
                     targetFileNameVariation.add(sborg.insert(pos, " copy").toString());
                     sborg = new StringBuilder(originalFile.getFileName());
@@ -84,8 +95,8 @@ public class FileListUtils extends FileList{
                         } catch (IOException e) {
                             Utils.errPrint(e);
                         }
-                    }
-                    targetFileNameVariation.clear();
+                    }*/
+                    //targetFileNameVariation.clear();
                 });
             }
             Utils.printProgress("duplicateCheck");

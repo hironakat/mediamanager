@@ -19,17 +19,17 @@ public class Main {
         Stream<Path> fileList = Utils.findFiles(FileInfoTypes.RootDir);
 
         GetFileInfo getFileInfoObj = new GetFileInfo();
-        FileListUtils filelist = new FileListUtils();
+        FileListUtils filelistUtils = new FileListUtils();
         LocalTime start;
         LocalTime finish;
 
         start = LocalTime.now();
 
-        if (!filelist.getFileInfoDBexist()) {
+        if (!filelistUtils.getFileInfoDBexist()) {
             fileList.forEach(path -> {
                 FileInfo fi = getFileInfoObj.getFileInfo(path.toAbsolutePath().toFile());
                 if (fi != null) {
-                    filelist.add(fi);
+                    filelistUtils.add(fi);
                 }
                 Utils.printProgress("FileList");
             });
@@ -38,55 +38,55 @@ public class Main {
         }
 
         start = LocalTime.now();
-        if (!filelist.getFileInfoDBexist()){
-            filelist.duplicateCheck();
+        if (!filelistUtils.getFileInfoDBexist()){
+            filelistUtils.duplicateCheck();
             finish = LocalTime.now();
             System.out.println("duplicateCheck " + Duration.between(start, finish).getSeconds() + "sec");
         }else{
-            filelist.getFromDB();
+            filelistUtils.getFromDB();
             finish = LocalTime.now();
             System.out.println("duplicateFiles.getFromDB " + Duration.between(start, finish).getSeconds() + "sec");
         }
 
         start = LocalTime.now();
         //filelist.print();
-        filelist.mkdir();
+        filelistUtils.mkdir();
         finish = LocalTime.now();
         System.out.println("mkdir "+ Duration.between(start, finish).getSeconds()+"sec");
 
         start = LocalTime.now();
-        filelist.fileCopy();
+        filelistUtils.fileCopy();
         finish = LocalTime.now();
         System.out.println("fileCopy "+ Duration.between(start, finish).getSeconds()+"sec");
 
-        if (!filelist.getFileInfoDBexist()) {
+        if (!filelistUtils.getFileInfoDBexist()) {
             start = LocalTime.now();
-            filelist.setDB();
+            filelistUtils.setDB();
             finish = LocalTime.now();
             System.out.println("setDB " + Duration.between(start, finish).getSeconds() + "sec");
             start = LocalTime.now();
         }
 
-        ListWindow listWindow = new ListWindow();
+        /*ListWindow listWindow = new ListWindow();
         DuplicateFileList duplicateFiles;
-        duplicateFiles = filelist.setDuplicate();
+        duplicateFiles = filelistUtils.setDuplicate();
         if(!duplicateFiles.isEmpty()) {
             duplicateFiles = duplicateFiles.dupSort();
             listWindow.setList(duplicateFiles);
             finish = LocalTime.now();
             System.out.println("setList " + Duration.between(start, finish).getSeconds() + "sec");
         }
-        System.out.println("Total Files " + filelist.getNumberOfFiles() + " Non picture files "+ filelist.countNumberOfNonPictureFiles() + " Duplicate File "+ filelist.countNumberOfDuplicateFiles()+" File Copied "+ filelist.countNumberOfFileCopied()+"Destination File Exist "+filelist.countNumberOfDestFileExist());
-        System.out.println("Total Files " + filelist.getNumberOfFiles() + " Non video files "+ filelist.countNumberOfNonVideoFiles() + " Duplicate File "+ filelist.countNumberOfDuplicateFiles()+" File Copied "+ filelist.countNumberOfFileCopied()+"Destination File Exist "+filelist.countNumberOfDestFileExist());
-
+        //System.out.println("Total Files " + filelistUtils.getNumberOfFiles() + " Non picture files "+ filelistUtils.countNumberOfNonPictureFiles() + " Duplicate File "+ filelistUtils.countNumberOfDuplicateFiles()+" File Copied "+ filelistUtils.countNumberOfFileCopied()+"Destination File Exist "+filelistUtils.countNumberOfDestFileExist());
+        System.out.println("Total Files " + filelistUtils.getNumberOfFiles() + " Non video files "+ filelistUtils.countNumberOfNonVideoFiles() + " Duplicate File "+ filelistUtils.countNumberOfDuplicateFiles()+" File Copied "+ filelistUtils.countNumberOfFileCopied()+"Destination File Exist "+filelistUtils.countNumberOfDestFileExist());
+    */
 
         //BufferedInputStream bis = null;
         BufferedWriter notpicturefileout = null;
         try {
             FileWriter notpicturefile = new FileWriter("D:\\filecount.txt", true); //true tells to append data.
             notpicturefileout = new BufferedWriter(notpicturefile);
-            notpicturefileout.write("Total Files " + filelist.getNumberOfFiles() + " Non picture files "+ filelist.countNumberOfNonPictureFiles() + " Duplicate File "+ filelist.countNumberOfDuplicateFiles()+" File Copied "+ filelist.countNumberOfFileCopied()+"Destination File Exist "+filelist.countNumberOfDestFileExist()+"\r\n");
-            notpicturefileout.write("Total Files " + filelist.getNumberOfFiles() + " Non video files "+ filelist.countNumberOfNonVideoFiles() + " Duplicate File "+ filelist.countNumberOfDuplicateFiles()+" File Copied "+ filelist.countNumberOfFileCopied()+"Destination File Exist "+filelist.countNumberOfDestFileExist()+"\r\n");
+            //notpicturefileout.write("Total Files " + filelistUtils.getNumberOfFiles() + " Non picture files "+ filelistUtils.countNumberOfNonPictureFiles() + " Duplicate File "+ filelistUtils.countNumberOfDuplicateFiles()+" File Copied "+ filelistUtils.countNumberOfFileCopied()+"Destination File Exist "+filelistUtils.countNumberOfDestFileExist()+"\r\n");
+            notpicturefileout.write("Total Files " + filelistUtils.getNumberOfFiles() + " Non video files "+ filelistUtils.countNumberOfNonVideoFiles() + " Duplicate File "+ filelistUtils.countNumberOfDuplicateFiles()+" File Copied "+ filelistUtils.countNumberOfFileCopied()+"Destination File Exist "+filelistUtils.countNumberOfDestFileExist()+"\r\n");
 
         }catch(IOException e){
             Utils.errPrint(e);
@@ -101,8 +101,8 @@ public class Main {
         }
 
 
-        listWindow.close();
-        filelist.closeDB();
+       // listWindow.close();
+        filelistUtils.closeDB();
     }
 
 }
