@@ -85,6 +85,7 @@ public class GetFileInfo {
                     } else {
                         returnValue.set(stringToDateTime("-999999999:01:01 0:0:0"));
                     }
+
                 }
             } catch (ImageProcessingException e) {
                 Utils.errPrint(e);
@@ -93,6 +94,13 @@ public class GetFileInfo {
                 Utils.errPrint(e);
                 return null;
             }
+        }
+        returnValue.set(file.length());
+        try {
+            returnValue.set(file);
+        }catch(FileInfoException e){
+            Utils.errPrint(e);
+            return null;
         }
         returnValue.checkValues();
         //returnValue.print();

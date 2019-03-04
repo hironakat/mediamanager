@@ -58,7 +58,10 @@ public class FileListUtils extends FileList{
                 fileInfoIteratorCheck.forEachRemaining(targetFile -> {
                     if(originalFile.getFileSize() == targetFile.getFileSize()){
                         try {
+                            System.out.println("Original; "+originalFile.getFilePath()+" Target: "+targetFile.getFilePath());
+                            System.out.println("Original; "+originalFile.getFileSize()+" Target: "+targetFile.getFileSize());
                             if (Files.equal(originalFile.getFileObj(), targetFile.getFileObj())) {
+                                System.out.println("Duplicated; "+targetFile.getFilePath());
                                 targetFile.setDuplicate(true);
                                 targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
                             }
