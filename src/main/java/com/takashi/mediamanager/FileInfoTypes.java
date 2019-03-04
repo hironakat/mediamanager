@@ -17,6 +17,7 @@ public class FileInfoTypes {
     final static String queryDupDBinfo = "SELECT * FROM dupinfo";
 
     final static String RootDir = "D:\\Videos";
+    //final static String RootDir = "D:\\tmp";
     final static String OutputDir = "D:\\VideoOutput";
     final static String DuplicateDir = "duplicate";
     final static String DateUnknownDir = "DateUnknown";
