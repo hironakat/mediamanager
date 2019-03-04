@@ -89,6 +89,8 @@ public class GetFileInfo {
                 }
             } catch (ImageProcessingException e) {
                 Utils.errPrint(e);
+                returnValue.set(LocalDateTime.ofInstant(Instant.ofEpochMilli(file.lastModified()), ZoneId.systemDefault()));
+                System.out.println("Modified time : "+returnValue.getDateTaken().toString());
                 return null;
             } catch (IOException e) {
                 Utils.errPrint(e);
