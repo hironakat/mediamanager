@@ -18,6 +18,7 @@ public class Utils {
     private static String funcName = null;
     private static String rootPath;
     private static CountWindow cw = new CountWindow();
+    private static long nonVideoCount = 0;
 
     public static Stream<Path> findFiles(String path) {
         Stream<Path> fileList = null;
@@ -108,6 +109,10 @@ public class Utils {
         e.printStackTrace();
     }
 
+    public static void printProgress(String str, long nonVideo) {
+        nonVideoCount = nonVideo;
+    }
+
     public static void printProgress(String str){
         if(funcName == null){
             funcName = str;
@@ -118,7 +123,11 @@ public class Utils {
         if( numOfFiles < 0){
             try {
                 Stream<Path> fileList = Files.walk(Paths.get(rootPath)).filter(Files::isRegularFile);
-                numOfFiles = fileList.count();
+                if(str.equals("fileCopy"))
+                    numOfFiles = fileList.count()-nonVideoCount;
+                else
+                    numOfFiles = fileList.count();
+
             } catch(IOException e){
                 errPrint(e);
             }
@@ -135,6 +144,7 @@ public class Utils {
         int count = 0;
         File f = new File(dirPath);
         File[] files = f.listFiles();
+
 
         if (files != null) {
             for (int i = 0; i < files.length; i++) {

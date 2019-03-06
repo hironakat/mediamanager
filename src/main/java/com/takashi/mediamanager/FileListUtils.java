@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 
 public class FileListUtils extends FileList{
     private FileListDB db;
+    private long nonVideoCount = -1;
 
     public FileListUtils(){
         super();
@@ -222,7 +223,7 @@ public class FileListUtils extends FileList{
                     originalFile.setDestFileExist(true);
                 }
             }
-            Utils.printProgress("fileCopy");
+            Utils.printProgress("fileCopy", getNonVideoCount());
         }
     }
 
@@ -327,6 +328,20 @@ public class FileListUtils extends FileList{
                 }
             }
         }
+    }
+
+    public long getNonVideoCount(){
+        if(nonVideoCount < 0){
+            nonVideoCount = 0;
+            Iterator<FileInfo> fileInfoIterator = filelist.iterator();
+            while (fileInfoIterator.hasNext()) {
+                FileInfo fi = fileInfoIterator.next();
+                if (fi.getNonVideoFile()) {
+                    nonVideoCount++;
+                }
+            }
+        }
+        return nonVideoCount;
     }
 
     private String addExtension(String filename, int i){
