@@ -136,8 +136,8 @@ public class FileListUtils extends FileList{
         BufferedWriter junkoDupfileout = null;
 
         try {
-            FileWriter junkoduplicateFileOutput = new FileWriter("D:\\JunkoDup.txt", true); //true tells to append data.
-            junkoDupfileout = new BufferedWriter(junkoduplicateFileOutput);
+            FileWriter duplicateFileOutputFile = new FileWriter("D:\\dup.txt", true); //true tells to append data.
+            junkoDupfileout = new BufferedWriter(duplicateFileOutputFile);
         } catch (IOException e) {
             Utils.errPrint(e);
         }

@@ -12,8 +12,8 @@ public class FileInfoTypes {
 
     final static String Dir_FILE = "File";
 
+    final static String Dir2 = "D:\\recover";
     final static String Dir1 = "D:\\Public Pictures";
-    final static String Dir2 = "D:\\JunkoPicture";
     final static String OutputDir = "D:\\Users\\Takashi\\IdeaProjects\\mediamanager\\Output";
     final static String DuplicateDir = "duplicate";
     final static String DateUnknownDir = "DateUnknown";
