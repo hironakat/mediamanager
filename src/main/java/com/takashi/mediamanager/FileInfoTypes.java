@@ -12,8 +12,8 @@ public class FileInfoTypes {
 
     final static String Dir_FILE = "File";
 
-    final static String RootDir = "D:\\phone";
-    final static String OutputDir = "D:\\Output";
+    final static String RootDir = "D:\\Output";
+    final static String OutputDir = "D:\\Output2";
     final static String DuplicateDir = "duplicate";
     final static String DateUnknownDir = "DateUnknown";
 
