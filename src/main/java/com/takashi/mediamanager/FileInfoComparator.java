@@ -1,8 +1,10 @@
 package com.takashi.mediamanager;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
 
 
 public class FileInfoComparator implements Comparator<FileInfo> {
@@ -33,9 +35,11 @@ public class FileInfoComparator implements Comparator<FileInfo> {
             }
         }
         keyList.clear();
-        if(returnvalue == 0){
-            returnvalue= p1.getFileName().compareTo(p2.getFileName());
-        }
+        /*if(returnvalue == 0){
+            returnvalue = p1.getFileName().compareTo(p2.getFileName());
+            System.out.println("returnvalue " + returnvalue);
+            returnvalue = -1;
+        }*/
         return returnvalue;
     }
 }
