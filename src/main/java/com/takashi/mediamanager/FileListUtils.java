@@ -155,7 +155,8 @@ public class FileListUtils extends FileList{
                 }*/
                 if (originalFile.getFileName().equals(targetFile.getFileName())) {
                     try {
-                        if (Files.equal(originalFile.getFileObj(), targetFile.getFileObj())) {
+                        //if (Files.equal(originalFile.getFileObj(), targetFile.getFileObj())) {
+                        if (java.nio.file.Files.isSameFile(originalFile.getFileObj().toPath(), targetFile.getFileObj().toPath())) {
                             targetFile.setDuplicate(true);
                             targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
                             System.out.print("targetFile " + targetFile.getFilePath()+"\n");
