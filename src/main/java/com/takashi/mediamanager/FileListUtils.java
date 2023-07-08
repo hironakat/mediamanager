@@ -1,7 +1,7 @@
 package com.takashi.mediamanager;
 
-import com.google.common.io.Files;
 
+import java.nio.file.Files;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
@@ -16,7 +16,7 @@ public class FileListUtils extends FileList{
 
     public FileListUtils(){
         super();
-        db = new FileListDB();
+        //db = new FileListDB();
     }
 
 
@@ -156,7 +156,7 @@ public class FileListUtils extends FileList{
                 if (originalFile.getFileName().equals(targetFile.getFileName())) {
                     try {
                         //if (Files.equal(originalFile.getFileObj(), targetFile.getFileObj())) {
-                        if (java.nio.file.Files.isSameFile(originalFile.getFileObj().toPath(), targetFile.getFileObj().toPath())) {
+                        if (Files.mismatch(originalFile.getFileObj().toPath(), targetFile.getFileObj().toPath())==-1L) {
                             targetFile.setDuplicate(true);
                             targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
                             System.out.print("targetFile " + targetFile.getFilePath()+"\n");
@@ -332,7 +332,7 @@ public class FileListUtils extends FileList{
     public long getNumberOfFiles(){
         long numOfFiles = 0l;
         try {
-            Stream<Path> fileList = java.nio.file.Files.walk(Paths.get(FileInfoTypes.Dir1)).filter(java.nio.file.Files::isRegularFile);
+            Stream<Path> fileList = Files.walk(Paths.get(FileInfoTypes.Dir1)).filter(Files::isRegularFile);
             numOfFiles = fileList.count();
         } catch(IOException e){
             Utils.errPrint(e);

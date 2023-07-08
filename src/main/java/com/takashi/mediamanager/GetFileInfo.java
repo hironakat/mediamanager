@@ -10,7 +10,6 @@ import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.file.FileSystemDirectory;
 
 import java.io.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
