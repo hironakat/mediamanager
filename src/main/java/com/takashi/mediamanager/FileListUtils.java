@@ -149,8 +149,8 @@ public class FileListUtils extends FileList{
             FileInfo targetFile = fileInfoIterator2.next();
             while (fileInfoIterator1.hasNext()) {
                 FileInfo originalFile = fileInfoIterator1.next();
-                String target = new String("DSC00087.JPG");
-                /*if(originalFile.getFileName().equals(target)){
+                /*String target = new String("DSC00087.JPG");
+                if(originalFile.getFileName().equals(target)){
                     System.out.print("originalFile " + target+"\n");
                 }
                 if(targetFile.getFileName().equals(target)){

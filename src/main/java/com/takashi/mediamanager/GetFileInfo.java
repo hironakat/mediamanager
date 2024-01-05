@@ -96,7 +96,7 @@ public class GetFileInfo {
             }
             if(fileInfo.getDateTimeTakenLocalDateTime() == LocalDateTime.MIN){
                 System.err.println("Date Taken is empty "+file.toPath());
-                //print(metadata, file);
+                print(metadata, file);
                 for (Directory i : dir) {
                     if (!i.isEmpty()) {
                         if (FileInfoTypes.Dir_FILE.equals(i.getName())) {
@@ -112,7 +112,7 @@ public class GetFileInfo {
                     }
                 }
             }
-            print(metadata, file);
+            //print(metadata, file);
             return fileInfo;
         } catch (ImageProcessingException e) {
             System.err.println("\n"+file.toPath());

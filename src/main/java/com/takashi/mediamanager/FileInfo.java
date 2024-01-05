@@ -71,9 +71,9 @@ public class FileInfo {
     protected void setDuplicate(boolean dup){duplicate = dup;}
     protected void setNonPictureFile(boolean dup){noPictureFile = dup;}
     protected void setDuplicateOriginalFile(File file){duplicateOrgFile = file;}
-    protected void setDestination(File des){destination = des;}
-    protected void setDestFileExist(boolean flag){destFileExist = flag;}
-    protected void setFileCopied(boolean flag){fileCopied = flag;}
+    //protected void setDestination(File des){destination = des;}
+    //protected void setDestFileExist(boolean flag){destFileExist = flag;}
+    //protected void setFileCopied(boolean flag){fileCopied = flag;}
     protected void setFileType(FileType type){fileType = type;}
 
     public String getFilePath(){return fileObj.getPath();}
@@ -82,13 +82,13 @@ public class FileInfo {
     public LocalDateTime getDateTimeTakenLocalDateTime(){return dateTaken;}
     //public String getDateTimeTaken(){return dateTaken.toString();}
     public LocalDate getDateTaken(){return dateTaken.toLocalDate();}
-    public long getFileSize(){ return fileSize.longValue();}
+    //public long getFileSize(){ return fileSize.longValue();}
     public Boolean getDuplicate(){ return duplicate; }
     public Boolean getNonPictureFile(){ return noPictureFile; }
-    public File getDuplicateOriginalFile(){return duplicateOrgFile;}
-    public File getDestinationFile(){return destination;}
+    //public File getDuplicateOriginalFile(){return duplicateOrgFile;}
+    //public File getDestinationFile(){return destination;}
     public Boolean getDestFileExist(){return destFileExist;}
-    public String getNonDateDirName(){return nonDateDirName;}
+    //public String getNonDateDirName(){return nonDateDirName;}
     public Boolean getFileCopied(){return fileCopied;}
     public FileType getFileType(){return fileType;}
     public String getPath(){
