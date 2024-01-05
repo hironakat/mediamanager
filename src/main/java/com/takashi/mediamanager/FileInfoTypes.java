@@ -10,17 +10,25 @@ public class FileInfoTypes {
     final static String querydbVer = "SELECT ver FROM version WHERE id = 0";
     final static String queryDupDBinfo = "SELECT * FROM dupinfo";
 
+    final static String imageMimeTag = "image/"
+;
     final static String Dir_FILE = "File";
 
-    final static String RootDir = "D:\\Output";
-    final static String OutputDir = "D:\\Output2";
+    final static String RootDir = "D:\\phone";  //original folder
+    final static String OutputDir = "D:\\Output";
     final static String DuplicateDir = "duplicate";
+    final static String VideoDir = "Public Videos";
+    final static String ImageDir = "Public Pictures";
     final static String DateUnknownDir = "DateUnknown";
 
     final static Integer dbver = 1;
 
-    public final static boolean OUTPUT_FILE_DUP_DEF = false;
+    public final static boolean OUTPUT_FILE_DUP_DEF = true;
     public final static String OUTPUT_DUPLICATE_FILE_NAME = "D:\\DuplicateFile.txt";
-    public final static boolean OUTPUT_NON_PIC_FILE_DEF = false;
-    public final static String OUTPUT_NON_PIC_FILE_NAME = "D:\\nonPictureFile.txt";
+    public final static boolean OUTPUT_METADATA_FILE_DEF = true;
+    public final static String OUTPUT_METADATA_FILE_NAME = "D:\\metadata.txt";
+    public final static boolean OUTPUT_FILE_COUNT_FILE_DEF = true;
+    public final static String OUTPUT_FILE_COUNT_FILE_NAME = "D:\\filecount.txt";
+    public final static boolean OUTPUT_FILE_INFO_FILE_DEF = true;
+    public final static String OUTPUT_FILE_INFO_FILE_NAME = "D:\\fileinfo.txt";
 }

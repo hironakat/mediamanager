@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 public class Utils {
     private static List<Path> formerPathList = new ArrayList<Path>();
-    private static long numOfFiles = -1, fileCount = 0/*, msgLen = 0*/;
+    private static long numOfFiles = -1, fileCount = 1/*, msgLen = 0*/;
     private static String funcName = null;
     private static String rootPath;
     private static CountWindow cw = new CountWindow();
@@ -31,33 +31,54 @@ public class Utils {
         return fileList;
     }
 
-    public static void mkDateDir(LocalDate date, boolean dupFlag, String nonDateDirName) {
+    public static void mkDateDir(LocalDate date, boolean dupFlag, String nonDateDirName, boolean nonPicture) {
         String folderName;
         String dirName;
-        Path dupDir, dnDir;
+        Path imageDupDir, videoDupDir, imageDnDir, videoDnDir;
 
-        dupDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.DuplicateDir);
-        if(!formerPathList.contains(dupDir)) {
-            mkDateDir(dupDir);
+        imageDupDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir);
+        if(!formerPathList.contains(imageDupDir)) {
+            mkDateDir(imageDupDir);
             //dupDir.toFile().mkdir();
-            formerPathList.add(dupDir);
+            formerPathList.add(imageDupDir);
         }
-        dnDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.DateUnknownDir);
-        if(!formerPathList.contains(dnDir)) {
-            mkDateDir(dnDir);
-            formerPathList.add(dnDir);
+        imageDnDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DateUnknownDir);
+        if(!formerPathList.contains(imageDnDir)) {
+            mkDateDir(imageDnDir);
+            formerPathList.add(imageDnDir);
+        }
+        videoDupDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir);
+        if(!formerPathList.contains(videoDupDir)) {
+            mkDateDir(videoDupDir);
+            //dupDir.toFile().mkdir();
+            formerPathList.add(videoDupDir);
+        }
+        videoDnDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DateUnknownDir);
+        if(!formerPathList.contains(videoDnDir)) {
+            mkDateDir(videoDnDir);
+            formerPathList.add(videoDnDir);
         }
 
-        if(date.equals(LocalDate.MIN)&&!dupFlag){
-            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.DateUnknownDir+"\\"+nonDateDirName);
-        }else if(!date.equals(LocalDate.MIN) && !dupFlag) {
+        if(date.equals(LocalDate.MIN) && !dupFlag && !nonPicture){
+            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DateUnknownDir + "\\"+nonDateDirName);
+        }else if(date.equals(LocalDate.MIN) && !dupFlag && nonPicture){
+            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DateUnknownDir + "\\"+nonDateDirName);
+        }else if(!date.equals(LocalDate.MIN) && !dupFlag && !nonPicture) {
             folderName = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            dirName = new String(FileInfoTypes.OutputDir + "\\" + folderName);
-        }else if(date.equals(LocalDate.MIN)&&dupFlag){
-            dirName = new String(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.DuplicateDir + "\\" + FileInfoTypes.DateUnknownDir+"\\"+nonDateDirName);
-        }else /*if(!date.equals(LocalDate.MIN) && dupFlag)*/{
+            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + folderName);
+        }else if(!date.equals(LocalDate.MIN) && !dupFlag && nonPicture){
             folderName = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            dirName = new String(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.DuplicateDir + "\\" + folderName);
+            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + folderName);
+        }else if(date.equals(LocalDate.MIN) && dupFlag && !nonPicture){
+            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + FileInfoTypes.DateUnknownDir + "\\" + nonDateDirName);
+        }else if(date.equals(LocalDate.MIN) && dupFlag && nonPicture){
+            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + FileInfoTypes.DateUnknownDir + "\\" + nonDateDirName);
+        }else if(!date.equals(LocalDate.MIN) && dupFlag && !nonPicture){
+            folderName = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + folderName);
+        }else{
+            folderName = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ FileInfoTypes.DuplicateDir + "\\" + folderName);
         }
         Path dir = Paths.get(dirName+"\\");
         mkDateDir(dir);
@@ -77,6 +98,38 @@ public class Utils {
             }
             formerPathList.add(Paths.get(pathName));
         }*/
+    }
+
+    public static void mkDateDir(FileDateDupflag dupFlag) {
+        String folderName;
+        String dirName;
+        Path imageDupDir, videoDupDir, imageDnDir, videoDnDir;
+
+        imageDupDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir);
+        if(!formerPathList.contains(imageDupDir)) {
+            mkDateDir(imageDupDir);
+            //dupDir.toFile().mkdir();
+            formerPathList.add(imageDupDir);
+        }
+        imageDnDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DateUnknownDir);
+        if(!formerPathList.contains(imageDnDir)) {
+            mkDateDir(imageDnDir);
+            formerPathList.add(imageDnDir);
+        }
+        videoDupDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir);
+        if(!formerPathList.contains(videoDupDir)) {
+            mkDateDir(videoDupDir);
+            //dupDir.toFile().mkdir();
+            formerPathList.add(videoDupDir);
+        }
+        videoDnDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DateUnknownDir);
+        if(!formerPathList.contains(videoDnDir)) {
+            mkDateDir(videoDnDir);
+            formerPathList.add(videoDnDir);
+        }
+
+        Path dir = Paths.get(dupFlag.getDirName()+"\\");
+        mkDateDir(dir);
     }
 
     private static void mkDateDir(Path dir){
@@ -112,10 +165,10 @@ public class Utils {
         if(funcName == null){
             funcName = str;
         } else if(!funcName.equalsIgnoreCase(str)){
-            fileCount = 0;
+            fileCount = 1;
             funcName = str;
         }
-        if( numOfFiles < 0){
+        if(numOfFiles < 0){
             try {
                 Stream<Path> fileList = Files.walk(Paths.get(rootPath)).filter(Files::isRegularFile);
                 numOfFiles = fileList.count();

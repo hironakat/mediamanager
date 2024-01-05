@@ -1,22 +1,24 @@
 package com.takashi.mediamanager;
 
+import com.drew.imaging.FileType;
 import com.google.common.io.Files;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Stream;
 
 public class FileListUtils extends FileList{
-    private FileListDB db;
+    //private FileListDB db;
 
     public FileListUtils(){
         super();
-        db = new FileListDB();
+        //db = new FileListDB();
     }
 
 
@@ -25,10 +27,11 @@ public class FileListUtils extends FileList{
         List<FileDateDupflag> datelist = new ArrayList<FileDateDupflag>();
         while (fileInfoIterator.hasNext()) {
             FileInfo fi = fileInfoIterator.next();
-            if(!fi.getNonPictureFile()) {
-                FileDateDupflag fileDateDupflag = new FileDateDupflag(fi.getDateTaken(), fi.getDuplicate(), fi.getNonDateDirName());
-                datelist.add(fileDateDupflag);
-            }
+            //if(!fi.getNonPictureFile()) {
+                //FileDateDupflag fileDateDupflag = new FileDateDupflag(fi.getDateTaken(), fi.getDuplicate(), fi.getNonDateDirName(),fi.getNonPictureFile());
+            FileDateDupflag fileDateDupflag = new FileDateDupflag(fi);
+            datelist.add(fileDateDupflag);
+            //}
         }
         Set<FileDateDupflag> hs = new HashSet<FileDateDupflag>();
         hs.addAll(datelist);
@@ -37,7 +40,8 @@ public class FileListUtils extends FileList{
         Iterator<FileDateDupflag> dateListIterator = datelist.iterator();
         while (dateListIterator.hasNext()) {
             FileDateDupflag fileDateDupFlag = dateListIterator.next();
-            Utils.mkDateDir(fileDateDupFlag.getDate(), fileDateDupFlag.getDupFlag(), fileDateDupFlag.getNonDateDirName());
+            //Utils.mkDateDir(fileDateDupFlag.getDate(), fileDateDupFlag.getDupFlag(), fileDateDupFlag.getNonDateDirName(), fileDateDupFlag.getnonPicture());
+            Utils.mkDateDir(fileDateDupFlag);
         }
     }
 
@@ -52,12 +56,12 @@ public class FileListUtils extends FileList{
 
         while (fileInfoIterator.hasNext()) {
             FileInfo originalFile = fileInfoIterator.next();
-            if(!originalFile.getNonPictureFile()) {
+            //if(!originalFile.getNonPictureFile()) {
                 fileInfoIteratorCheck = filelist.listIterator(fileInfoIterator.nextIndex());
                 fileInfoIteratorCheck.forEachRemaining(targetFile -> {
                     if(originalFile.getFileSize() == targetFile.getFileSize()){
                         try {
-                            if (Files.equal(originalFile.getFileObj(), targetFile.getFileObj())) {
+                            if (java.nio.file.Files.mismatch(originalFile.getFileObj().toPath(), targetFile.getFileObj().toPath()) == -1L) {
                                 targetFile.setDuplicate(true);
                                 targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
                             }
@@ -97,7 +101,7 @@ public class FileListUtils extends FileList{
                     }
                     targetFileNameVariation.clear();*/
                 });
-            }
+            //}
             Utils.printProgress("duplicateCheck");
         }
 
@@ -139,15 +143,16 @@ public class FileListUtils extends FileList{
         String dirName;
         while (fileInfoIterator.hasNext()) {
             FileInfo originalFile = fileInfoIterator.next();
-            if (!originalFile.getNonPictureFile() && !originalFile.getDuplicate()) {
-                LocalDate ld = originalFile.getDateTaken();
+            //if (/*!originalFile.getNonPictureFile() &&*/ !originalFile.getDuplicate()) {
+                /*LocalDate ld = originalFile.getDateTaken();
                 if(ld.equals(LocalDate.MIN)) {
                     dirName = new String(FileInfoTypes.OutputDir + "\\" + "DateUnknown"+"\\"+originalFile.getNonDateDirName());
                 } else {
                     dirName = new String(FileInfoTypes.OutputDir + "\\" + ld.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                }
+                }*/
 
-                File fileOut = new File(dirName+"\\"+originalFile.getFileName());
+                //File fileOut = new File(dirName+"\\"+originalFile.getFileName());
+                File fileOut = new File(originalFile.getPath());
                 if(!fileOut.exists()) {
                     try {
                         FileChannel orgFile = new FileInputStream(originalFile.getFileObj()).getChannel();
@@ -165,8 +170,8 @@ public class FileListUtils extends FileList{
                     originalFile.setDestination(fileOut);
                     originalFile.setDestFileExist(true);
                 }
-            }else if (!originalFile.getNonPictureFile() && originalFile.getDuplicate()) {
-                LocalDate ld = originalFile.getDateTaken();
+            //}else if (/*!originalFile.getNonPictureFile() &&*/ originalFile.getDuplicate()) {
+                /*LocalDate ld = originalFile.getDateTaken();
                 if(ld.equals(LocalDate.MIN)) {
                     dirName = new String(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.DuplicateDir + "\\" + "DateUnknown"+"\\"+originalFile.getNonDateDirName());
                 } else {
@@ -193,12 +198,12 @@ public class FileListUtils extends FileList{
                     originalFile.setDestination(fileOut);
                     originalFile.setDestFileExist(true);
                 }
-            }
+            }*/
             Utils.printProgress("fileCopy");
         }
     }
 
-    public DuplicateFileList setDuplicate(){
+    public DuplicateFileList getDuplicate(){
         DuplicateFileList duplicateList = new DuplicateFileList();
         ListIterator<FileInfo> fileInfoIterator = filelist.listIterator(0);
         while (fileInfoIterator.hasNext()) {
@@ -210,16 +215,16 @@ public class FileListUtils extends FileList{
         return duplicateList;
     }
 
-    public void setDB(){
+    /*public void setDB(){
         ListIterator<FileInfo> fileInfoIterator = filelist.listIterator(0);
 
         fileInfoIterator.forEachRemaining(filelist-> {
             db.InsertRecord(filelist);
         });
         db.resetCounter();
-    }
+    }*/
 
-    public void updateDB(){
+    /*public void updateDB(){
         ListIterator<FileInfo> fileInfoIterator = filelist.listIterator(0);
 
         fileInfoIterator.forEachRemaining(filelist-> {
@@ -227,33 +232,33 @@ public class FileListUtils extends FileList{
         });
         db.resetCounter();
         db.print();
-    }
+    }*/
 
-    public void getFromDB(){
+    /*public void getFromDB(){
         //db.print();
         db.getFromDB(filelist);
-    }
+    }*/
 
-    public void closeDB(){
+    /*public void closeDB(){
         //db.print();
         db.CloseDB();
-    }
+    }*/
 
     public void print(){
         ListIterator<FileInfo> fileInfoIterator = filelist.listIterator(0);
-        FileListDB db = new FileListDB();
+        //FileListDB db = new FileListDB();
         fileInfoIterator.forEachRemaining(filelist-> {
             System.out.println(filelist.getDateTaken().toString()+" "+filelist.getFileName()+" "+filelist.getDuplicate());
         });
     }
 
-    public boolean getFileInfoDBexist(){
+    /*public boolean getFileInfoDBexist(){
         return db.getFileInfoDBexist();
-    }
+    }*/
 
-    public long countNumberOfNonPictureFiles(){
+    /*public long countNumberOfNonPictureFiles(){
         return filelist.stream().filter(fl -> fl.getNonPictureFile()).count();
-    }
+    }*/
 
     public long countNumberOfDuplicateFiles(){
         return filelist.stream().filter(fl -> fl.getDuplicate()).count();
@@ -276,5 +281,40 @@ public class FileListUtils extends FileList{
             Utils.errPrint(e);
         }
         return numOfFiles;
+    }
+
+    public void handleUnknownFile(){
+        Iterator<FileInfo> fileInfoIterator = filelist.iterator();
+
+        while (fileInfoIterator.hasNext()) {
+            FileInfo fi = fileInfoIterator.next();
+            if (fi.getFileType() == FileType.Unknown) {
+                String unknownFileDir = fi.getFileObj().getParent();
+                String unknownFileName = fi.getFileObj().getName();
+                unknownFileName = unknownFileName.substring(0, unknownFileName.indexOf('.'));
+                if(unknownFileName.contains(" ")){
+                    unknownFileName = unknownFileName.substring(0, unknownFileName.indexOf(' '));
+                }
+                Iterator<FileInfo> fileInfoIterator2 = filelist.iterator();
+                while (fileInfoIterator2.hasNext()) {
+                    FileInfo knownFile = fileInfoIterator2.next();
+                    if (knownFile.getFileType() != FileType.Unknown &&
+                        knownFile.getFileObj().getParent().equalsIgnoreCase(unknownFileDir) &&
+                        knownFile.getFileObj().getName().substring(0, knownFile.getFileObj().getName().indexOf('.')).equalsIgnoreCase(unknownFileName) &&
+                        !knownFile.getFileObj().getPath().equalsIgnoreCase(fi.getFileObj().getPath())) {
+                        //System.err.println("match " + fi.getFileObj().getPath() + " " + knownFile.getFileObj().getPath());
+                        fi.set(knownFile.getDateTimeTakenLocalDateTime());
+                        fi.setFileType(knownFile.getFileType());
+                        fi.setNonPictureFile(knownFile.getNonPictureFile());
+                        fi.setFileType(knownFile.getFileType());
+                        fi.set(knownFile.getDateTimeTakenLocalDateTime());
+                        fi.set(fi.getFileObj().length());
+                    }
+                }
+                if(fi.getFileType() == FileType.Unknown) {
+                    System.err.println("handleUnknownFile no match " + fi.getFileObj().getPath());
+                }
+            }
+        }
     }
 }
