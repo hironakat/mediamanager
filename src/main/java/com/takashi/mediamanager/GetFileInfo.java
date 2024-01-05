@@ -38,13 +38,13 @@ public class GetFileInfo {
         }catch(IOException e){
             Utils.errPrint(file.toPath().toString(), e);
         }
-        System.out.println(file.getPath()+" "+fileType.getName()+" "+fileType.getLongName()+" "+fileType.getMimeType()+" "+fileType.getCommonExtension());
+        //System.out.println(file.getPath()+" "+fileType.getName()+" "+fileType.getLongName()+" "+fileType.getMimeType()+" "+fileType.getCommonExtension());
         returnValue.setFileType(fileType);
         returnValue.setNonPictureFile(ifPictureFile(fileType));
 
-        //if(fileType != FileType.Unknown){
+        if(fileType != FileType.Unknown){
             returnValue = processFileInfo(file, returnValue);
-        //}
+        }
         returnValue.checkValues();
         returnValue.print();
         return returnValue;
