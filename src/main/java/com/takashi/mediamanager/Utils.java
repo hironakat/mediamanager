@@ -5,21 +5,21 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+//import java.time.LocalDate;
+//import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Iterator;
+//import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class Utils {
-    private  List<Path> formerPathList = new ArrayList<Path>();
-    private  long numOfFiles = -1, fileCount = 0/*, msgLen = 0*/;
-    private  String funcName = null;
-    private  String rootPath;
-    private  static CountWindow cw = new CountWindow();
+    private final static List<Path> formerPathList = new ArrayList<Path>();
+    private long numOfFiles = -1, fileCount = 1/*, msgLen = 0*/;
+    private static String funcName = null;
+    private String rootPath;
+    private final static CountWindow cw = new CountWindow();
 
-    public  Stream<Path> findFiles(String path) {
+    public Stream<Path> findFiles(String path) {
         Stream<Path> fileList = null;
         rootPath = path;
 
@@ -31,7 +31,7 @@ public class Utils {
         return fileList;
     }
 
-    public  void mkDateDir(LocalDate date, boolean dupFlag, String nonDateDirName) {
+    /*public  void mkDateDir(LocalDate date, boolean dupFlag, String nonDateDirName) {
         String folderName;
         String dirName;
         Path dupDir, dnDir;
@@ -55,12 +55,12 @@ public class Utils {
             dirName = new String(FileInfoTypes.OutputDir + "\\" + folderName);
         }else if(date.equals(LocalDate.MIN)&&dupFlag){
             dirName = new String(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.DuplicateDir + "\\" + FileInfoTypes.DateUnknownDir+"\\"+nonDateDirName);
-        }else /*if(!date.equals(LocalDate.MIN) && dupFlag)*/{
+        }else*/ /*if(!date.equals(LocalDate.MIN) && dupFlag)*//*{
             folderName = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             dirName = new String(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.DuplicateDir + "\\" + folderName);
         }
         Path dir = Paths.get(dirName+"\\");
-        mkDateDir(dir);
+        mkDateDir(dir);*/
         /*if(!formerPathList.contains(dir)) {
             Iterator<Path> it = dir.iterator();
             String pathName = FileInfoTypes.OutputDir.substring(0, FileInfoTypes.OutputDir.indexOf(':') + 2);
@@ -77,9 +77,9 @@ public class Utils {
             }
             formerPathList.add(Paths.get(pathName));
         }*/
-    }
+    /*}*/
 
-    private  void mkDateDir(Path dir){
+    /*private  void mkDateDir(Path dir){
         if(!formerPathList.contains(dir)) {
             Iterator<Path> it = dir.iterator();
             String pathName = FileInfoTypes.OutputDir.substring(0, FileInfoTypes.OutputDir.indexOf(':') + 2);
@@ -96,7 +96,7 @@ public class Utils {
             }
             formerPathList.add(Paths.get(pathName));
         }
-    }
+    }*/
 
     public static void errPrint(Exception e){
         System.err.println("EXCEPTION: " + e);
@@ -108,14 +108,18 @@ public class Utils {
         e.printStackTrace();
     }
 
-    public  void printProgress(String str){
+    public static void errPrint(String str){
+        System.err.println("EXCEPTION: " + str + " ");
+    }
+
+    public void printProgress(String str){
         if(funcName == null){
             funcName = str;
         } else if(!funcName.equalsIgnoreCase(str)){
-            fileCount = 0;
+            fileCount = 1;
             funcName = str;
         }
-        if( numOfFiles < 0){
+        if(numOfFiles < 0){
             try {
                 Stream<Path> fileList = Files.walk(Paths.get(rootPath)).filter(Files::isRegularFile);
                 numOfFiles = fileList.count();
@@ -124,14 +128,14 @@ public class Utils {
             }
         }
         float percentage = (float)fileCount/(float)numOfFiles*(float)100;
-        String msg = new String(str+" "+ fileCount +" "+numOfFiles+" "+ String.format ("%.2f", percentage)+"%\n");
+        String msg = str+" "+ fileCount +" "+numOfFiles+" "+ String.format ("%.2f", percentage)+"%\n";
         //msgLen = msg.length();
         //System.out.print(msg);
         cw.update(msg);
         fileCount++;
     }
 
-    private  int getNumOfFiles(String dirPath) {
+    private static int getNumOfFiles(String dirPath) {
         int count = 0;
         File f = new File(dirPath);
         File[] files = f.listFiles();
@@ -148,6 +152,4 @@ public class Utils {
         }
         return count;
     }
-
-
 }

@@ -1,18 +1,21 @@
 package com.takashi.mediamanager;
 
+//import com.drew.imaging.FileType;
+//import com.google.common.io.Files;
 
 import java.nio.file.Files;
 import java.io.*;
-import java.nio.channels.FileChannel;
+//import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+//import java.time.Duration;
+//import java.time.LocalDate;
+//import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Stream;
 
 public class FileListUtils extends FileList{
-    private FileListDB db;
+    //private FileListDB db;
 
     public FileListUtils(){
         super();
@@ -136,7 +139,7 @@ public class FileListUtils extends FileList{
         BufferedWriter junkoDupfileout = null;
 
         try {
-            FileWriter duplicateFileOutputFile = new FileWriter("D:\\dup.txt", true); //true tells to append data.
+            FileWriter duplicateFileOutputFile = new FileWriter(FileInfoTypes.OUTPUT_DUPLICATE_FILE_NAME, true); //true tells to append data.
             junkoDupfileout = new BufferedWriter(duplicateFileOutputFile);
         } catch (IOException e) {
             Utils.errPrint(e);
@@ -159,7 +162,7 @@ public class FileListUtils extends FileList{
                         if (Files.mismatch(originalFile.getFileObj().toPath(), targetFile.getFileObj().toPath())==-1L) {
                             targetFile.setDuplicate(true);
                             targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
-                            System.out.print("targetFile " + targetFile.getFilePath()+"\n");
+                            //System.out.print("targetFile " + targetFile.getFilePath()+"\n");
                             try {
                                 junkoDupfileout.write(targetFile.getFilePath() +"\r\n");
                             } catch (IOException e) {
@@ -186,7 +189,7 @@ public class FileListUtils extends FileList{
     }
 
 
-    public void fileCopy()  {
+    /*public void fileCopy()  {
         Iterator<FileInfo> fileInfoIterator = filelist.iterator();
         String dirName;
         while (fileInfoIterator.hasNext()) {
@@ -248,9 +251,9 @@ public class FileListUtils extends FileList{
             }
             //Utils.printProgress("fileCopy");
         }
-    }
+    }*/
 
-    public DuplicateFileList setDuplicate(){
+    /*public DuplicateFileList setDuplicate(){
         DuplicateFileList duplicateList = new DuplicateFileList();
         ListIterator<FileInfo> fileInfoIterator = filelist.listIterator(0);
         while (fileInfoIterator.hasNext()) {
@@ -260,18 +263,18 @@ public class FileListUtils extends FileList{
             }
         }
         return duplicateList;
-    }
+    }*/
 
-    public void setDB(){
+    /*public void setDB(){
         ListIterator<FileInfo> fileInfoIterator = filelist.listIterator(0);
 
         fileInfoIterator.forEachRemaining(filelist-> {
             db.InsertRecord(filelist);
         });
         db.resetCounter();
-    }
+    }*/
 
-    public void updateDB(){
+    /*public void updateDB(){
         ListIterator<FileInfo> fileInfoIterator = filelist.listIterator(0);
 
         fileInfoIterator.forEachRemaining(filelist-> {
@@ -289,11 +292,11 @@ public class FileListUtils extends FileList{
     public void closeDB(){
         //db.print();
         db.CloseDB();
-    }
+    }*/
 
     public void print(){
         ListIterator<FileInfo> fileInfoIterator = filelist.listIterator(0);
-        FileListDB db = new FileListDB();
+        //FileListDB db = new FileListDB();
         fileInfoIterator.forEachRemaining(filelist-> {
             System.out.println(filelist.getDateTaken().toString()+" "+filelist.getFileName()+" "+filelist.getDuplicate());
         });
@@ -301,7 +304,7 @@ public class FileListUtils extends FileList{
 
     public void printDup(){
         ListIterator<FileInfo> fileInfoIterator = filelist.listIterator(0);
-        FileListDB db = new FileListDB();
+        //FileListDB db = new FileListDB();
         fileInfoIterator.forEachRemaining(filelist-> {
             if(filelist.getDuplicate()) {
                 System.out.println(filelist.getDateTaken().toString() + " " + filelist.getFileName());
@@ -309,9 +312,9 @@ public class FileListUtils extends FileList{
         });
     }
 
-    public boolean getFileInfoDBexist(){
+    /*public boolean getFileInfoDBexist(){
         return db.getFileInfoDBexist();
-    }
+    }*/
 
     public long countNumberOfNonPictureFiles(){
         return filelist.stream().filter(fl -> fl.getNonPictureFile()).count();

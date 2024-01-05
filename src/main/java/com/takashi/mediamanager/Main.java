@@ -1,16 +1,16 @@
 package com.takashi.mediamanager;
 
 
-import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+//import java.io.BufferedInputStream;
+//import java.io.BufferedWriter;
+//import java.io.FileWriter;
+//import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.stream.Stream;
 
-public class Main{
+public class Main {
     public static void main(String[] args) {
         Utils util1 = new Utils();
         Utils util2 = new Utils();
@@ -22,6 +22,7 @@ public class Main{
         FileListUtils filelistUtil2 = new FileListUtils();
         LocalTime start;
         LocalTime finish;
+        getFileInfoObj.fileCleanUp();
 
         start = LocalTime.now();
 
@@ -42,7 +43,6 @@ public class Main{
         finish = LocalTime.now();
         System.out.println("FileList " + Duration.between(start, finish).getSeconds() + "sec");
 
-
         start = LocalTime.now();
 
         filelistUtil1.duplicateCheck(filelistUtil2, util2);
@@ -50,10 +50,6 @@ public class Main{
         System.out.println("duplicateCheck " + Duration.between(start, finish).getSeconds() + "sec");
 
         filelistUtil1.printDup();
-
-
-
     }
-
 }
 
