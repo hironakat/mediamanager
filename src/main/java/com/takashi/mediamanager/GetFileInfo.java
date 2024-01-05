@@ -94,7 +94,7 @@ public class GetFileInfo {
                 }
             }
             if(fileInfo.getDateTimeTakenLocalDateTime() == LocalDateTime.MIN){
-                System.err.println("Date Taken is empty "+file.toPath().toString());
+                System.err.println("Date Taken is empty "+file.toPath());
                 for (Directory i : dir) {
                     if (!i.isEmpty()) {
                         if (FileInfoTypes.Dir_FILE.equals(i.getName())) {
@@ -113,20 +113,20 @@ public class GetFileInfo {
             print(metadata, file);
             return fileInfo;
         } catch (ImageProcessingException e) {
-            System.err.println("\n"+file.toPath().toString());
+            System.err.println("\n"+file.toPath());
             Utils.errPrint(e);
             return fileInfo;
         } catch (IOException e) {
-            System.err.println("\n"+file.toPath().toString());
+            System.err.println("\n"+file.toPath());
             Utils.errPrint(e);
             return fileInfo;
         }
     }
 
-    private FileInfo processUnknownFileInfo(File file, FileInfo fileInfoval){
+    /*private FileInfo processUnknownFileInfo(File file, FileInfo fileInfoval){
         FileInfo fileInfo = new FileInfo(fileInfoval);
         return fileInfo;
-    }
+    }*/
     private boolean ifPictureFile(FileType fileType){
         boolean returnvalue = false;
         try {

@@ -12,7 +12,7 @@ public class ListWindow extends FileList  {
     private final static  String[] columnName = {"Original","Duplicate"};
     private static GraphicsConfiguration gc;
     private JFrame dupListwindow, orgImgWindow, dupImageWindow;
-    private Image   orgImg, dupImg;
+    //private Image   orgImg, dupImg;
     private static PictureDisplay orgCanv;
     private static PictureDisplay dupCanv;
     private static JScrollPane scrPane;

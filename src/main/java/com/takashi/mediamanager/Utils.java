@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+//import java.time.LocalDate;
+//import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -101,8 +101,8 @@ public class Utils {
     //}
 
     public static void mkDateDir(FileDateDupflag dupFlag) {
-        String folderName;
-        String dirName;
+        //String folderName;
+        //String dirName;
         Path imageDupDir, videoDupDir, imageDnDir, videoDnDir;
 
         imageDupDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir);
@@ -141,7 +141,9 @@ public class Utils {
                 pathName = pathName + it.next().toString();
                 File currentPath = new File(pathName);
                 if (!currentPath.exists()) {
-                    currentPath.mkdir();
+                    if(!currentPath.mkdir()){
+                      System.err.println("mkdir failed "+currentPath.getPath());
+                    }
                     pathName = pathName + "\\";
                 } else {
                     pathName = pathName + "\\";
@@ -177,7 +179,7 @@ public class Utils {
             }
         }
         float percentage = (float)fileCount/(float)numOfFiles*(float)100;
-        String msg = new String(str+" "+ fileCount +" "+numOfFiles+" "+ String.format ("%.2f", percentage)+"%\n");
+        String msg = str+" "+ fileCount +" "+numOfFiles+" "+ String.format ("%.2f", percentage)+"%\n";
         //msgLen = msg.length();
         //System.out.print(msg);
         cw.update(msg);
