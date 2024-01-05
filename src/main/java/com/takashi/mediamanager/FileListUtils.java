@@ -1,15 +1,15 @@
 package com.takashi.mediamanager;
 
 import com.drew.imaging.FileType;
-import com.google.common.io.Files;
+//import com.google.common.io.Files;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+//import java.time.Duration;
+//import java.time.LocalDate;
+//import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Stream;
 

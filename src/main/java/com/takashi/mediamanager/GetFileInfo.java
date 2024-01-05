@@ -10,7 +10,7 @@ import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.file.FileSystemDirectory;
-import com.drew.metadata.heif.HeifDirectory;
+//import com.drew.metadata.heif.HeifDirectory;
 import com.drew.metadata.mov.QuickTimeDirectory;
 import com.drew.metadata.mp4.Mp4Directory;
 
@@ -29,7 +29,7 @@ public class GetFileInfo {
             Utils.errPrint(e);
         }
 
-        BufferedInputStream bis = null;
+        BufferedInputStream bis;
         FileType fileType = FileType.Unknown;
         try {
             bis = new BufferedInputStream(new FileInputStream(file));

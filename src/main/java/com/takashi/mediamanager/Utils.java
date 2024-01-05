@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class Utils {
-    private static List<Path> formerPathList = new ArrayList<Path>();
+    private final static List<Path> formerPathList = new ArrayList<Path>();
     private static long numOfFiles = -1, fileCount = 1/*, msgLen = 0*/;
     private static String funcName = null;
     private static String rootPath;
-    private static CountWindow cw = new CountWindow();
+    private final static CountWindow cw = new CountWindow();
 
     public static Stream<Path> findFiles(String path) {
         Stream<Path> fileList = null;
@@ -31,7 +31,7 @@ public class Utils {
         return fileList;
     }
 
-    public static void mkDateDir(LocalDate date, boolean dupFlag, String nonDateDirName, boolean nonPicture) {
+    /*public static void mkDateDir(LocalDate date, boolean dupFlag, String nonDateDirName, boolean nonPicture) {
         String folderName;
         String dirName;
         Path imageDupDir, videoDupDir, imageDnDir, videoDnDir;
@@ -60,28 +60,28 @@ public class Utils {
         }
 
         if(date.equals(LocalDate.MIN) && !dupFlag && !nonPicture){
-            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DateUnknownDir + "\\"+nonDateDirName);
+            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DateUnknownDir + "\\"+nonDateDirName;
         }else if(date.equals(LocalDate.MIN) && !dupFlag && nonPicture){
-            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DateUnknownDir + "\\"+nonDateDirName);
+            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DateUnknownDir + "\\"+nonDateDirName;
         }else if(!date.equals(LocalDate.MIN) && !dupFlag && !nonPicture) {
             folderName = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + folderName);
+            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + folderName;
         }else if(!date.equals(LocalDate.MIN) && !dupFlag && nonPicture){
             folderName = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + folderName);
+            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + folderName;
         }else if(date.equals(LocalDate.MIN) && dupFlag && !nonPicture){
-            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + FileInfoTypes.DateUnknownDir + "\\" + nonDateDirName);
+            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + FileInfoTypes.DateUnknownDir + "\\" + nonDateDirName;
         }else if(date.equals(LocalDate.MIN) && dupFlag && nonPicture){
-            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + FileInfoTypes.DateUnknownDir + "\\" + nonDateDirName);
+            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + FileInfoTypes.DateUnknownDir + "\\" + nonDateDirName;
         }else if(!date.equals(LocalDate.MIN) && dupFlag && !nonPicture){
             folderName = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + folderName);
+            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + folderName;
         }else{
             folderName = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            dirName = new String(FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ FileInfoTypes.DuplicateDir + "\\" + folderName);
+            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ FileInfoTypes.DuplicateDir + "\\" + folderName;
         }
         Path dir = Paths.get(dirName+"\\");
-        mkDateDir(dir);
+        mkDateDir(dir);*/
         /*if(!formerPathList.contains(dir)) {
             Iterator<Path> it = dir.iterator();
             String pathName = FileInfoTypes.OutputDir.substring(0, FileInfoTypes.OutputDir.indexOf(':') + 2);
@@ -98,7 +98,7 @@ public class Utils {
             }
             formerPathList.add(Paths.get(pathName));
         }*/
-    }
+    //}
 
     public static void mkDateDir(FileDateDupflag dupFlag) {
         String folderName;

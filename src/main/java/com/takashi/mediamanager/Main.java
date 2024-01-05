@@ -66,7 +66,7 @@ public class Main {
             System.out.println("setList " + Duration.between(start, finish).getSeconds() + "sec");
         }
         System.out.println("Total Files " + filelistUtils.getNumberOfFiles() + /*" Non picture files "+ filelistUtils.countNumberOfNonPictureFiles() +*/ " Duplicate File "+ filelistUtils.countNumberOfDuplicateFiles()+" File Copied "+ filelistUtils.countNumberOfFileCopied()+"Destination File Exist "+filelistUtils.countNumberOfDestFileExist());
-        BufferedInputStream bis = null;
+        //BufferedInputStream bis = null;
         BufferedWriter notpicturefileout = null;
         if(FileInfoTypes.OUTPUT_FILE_COUNT_FILE_DEF) {
             try {

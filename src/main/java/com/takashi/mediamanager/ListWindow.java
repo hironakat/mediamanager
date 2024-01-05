@@ -7,9 +7,9 @@ import java.awt.*;
 
 public class ListWindow extends FileList  {
 
-    private static final long serialVersionUID = 1L;
+    //private static final long serialVersionUID = 1L;
     private static JTable list;
-    private static  String[] columnName = {"Original","Duplicate"};
+    private final static  String[] columnName = {"Original","Duplicate"};
     private static GraphicsConfiguration gc;
     private JFrame dupListwindow, orgImgWindow, dupImageWindow;
     private Image   orgImg, dupImg;

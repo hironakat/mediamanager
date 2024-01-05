@@ -1,6 +1,6 @@
 package com.takashi.mediamanager;
 
-import com.drew.imaging.FileType;
+//import com.drew.imaging.FileType;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +12,7 @@ public abstract class DateTimeBase {
     protected int minute = 0;
     protected int second = 0;
     protected String datetime;
-    private char dateDelimiter ;
+    //private char dateDelimiter ;
 
 
     public abstract LocalDateTime stringToDateTime();

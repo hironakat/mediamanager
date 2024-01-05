@@ -2,8 +2,8 @@ package com.takashi.mediamanager;
 
 
 import com.drew.imaging.FileType;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Tag;
+//import com.drew.metadata.Directory;
+//import com.drew.metadata.Tag;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -80,7 +80,7 @@ public class FileInfo {
     public String getFileName(){return fileName;}
     public File getFileObj(){return fileObj;}
     public LocalDateTime getDateTimeTakenLocalDateTime(){return dateTaken;}
-    public String getDateTimeTaken(){return dateTaken.toString();}
+    //public String getDateTimeTaken(){return dateTaken.toString();}
     public LocalDate getDateTaken(){return dateTaken.toLocalDate();}
     public long getFileSize(){ return fileSize.longValue();}
     public Boolean getDuplicate(){ return duplicate; }
