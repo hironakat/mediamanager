@@ -12,6 +12,7 @@ import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.file.FileSystemDirectory;
 //import com.drew.metadata.heif.HeifDirectory;
 import com.drew.metadata.mov.QuickTimeDirectory;
+import com.drew.metadata.mov.metadata.QuickTimeMetadataDirectory;
 import com.drew.metadata.mp4.Mp4Directory;
 
 import java.io.*;
@@ -37,13 +38,13 @@ public class GetFileInfo {
         }catch(IOException e){
             Utils.errPrint(file.toPath().toString(), e);
         }
-        //System.out.println(file.getPath()+" "+fileType.getName()+" "+fileType.getLongName()+" "+fileType.getMimeType()+" "+fileType.getCommonExtension());
+        System.out.println(file.getPath()+" "+fileType.getName()+" "+fileType.getLongName()+" "+fileType.getMimeType()+" "+fileType.getCommonExtension());
         returnValue.setFileType(fileType);
         returnValue.setNonPictureFile(ifPictureFile(fileType));
 
-        if(fileType != FileType.Unknown){
+        //if(fileType != FileType.Unknown){
             returnValue = processFileInfo(file, returnValue);
-        }
+        //}
         returnValue.checkValues();
         returnValue.print();
         return returnValue;
@@ -74,12 +75,12 @@ public class GetFileInfo {
                             fileInfo.set(mp4DateTime.stringToDateTime());
                         }
                     }
-                    QuickTimeDirectory qt = new QuickTimeDirectory();
+                    QuickTimeMetadataDirectory qt = new QuickTimeMetadataDirectory();
                     if (qt.getName().equals(i.getName())) {
-                        givenParam = i.getString(QuickTimeDirectory.TAG_CREATION_TIME);
+                        givenParam = i.getString(QuickTimeMetadataDirectory.TAG_CREATION_DATE);
                         if (givenParam != null) {
-                            Mp4DateTime mp4DateTime = new Mp4DateTime(givenParam);
-                            fileInfo.set(mp4DateTime.stringToDateTime());
+                            QtDateTime qtDateTime = new QtDateTime(givenParam);
+                            fileInfo.set(qtDateTime.stringToDateTime());
                         }
                     }
                     if (FileInfoTypes.Dir_FILE.equals(i.getName())) {
