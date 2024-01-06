@@ -12,6 +12,7 @@ public abstract class DateTimeBase {
     protected int minute = 0;
     protected int second = 0;
     protected String datetime;
+    protected String path;
     //private char dateDelimiter ;
 
 
@@ -25,7 +26,7 @@ public abstract class DateTimeBase {
         index1 = dateTime.indexOf('/');
 
         if(index0 == -1 && index1 == -1){
-            System.err.print("no delimiter found "+dateTime);
+            //System.err.println(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+"no delimiter found "+dateTime);
         }else if(index0 == -1){
             delimiter = '/';
         }else if(index1 == -1){

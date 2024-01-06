@@ -53,39 +53,39 @@ public class GetFileInfo {
         FileInfo fileInfo = new FileInfo(fileInfoval);
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(file);
-            String givenParam;
-
+            String givenParam[] = new String[2];
+            givenParam[0] = file.getPath();
             Iterable<Directory> dir = metadata.getDirectories();
 
             for (Directory i : dir) {
                 if(!i.isEmpty()) {
                     ExifSubIFDDirectory exifsub = new ExifSubIFDDirectory();
                     if (exifsub.getName().equals(i.getName())) {
-                        givenParam = i.getString(ExifDirectoryBase.TAG_DATETIME_ORIGINAL);
-                        if (givenParam != null) {
+                        givenParam[1] = i.getString(ExifDirectoryBase.TAG_DATETIME_ORIGINAL);
+                        if (givenParam[1]  != null) {
                             ExifSubDateTime exifDateTime = new ExifSubDateTime(givenParam);
                             fileInfo.set(exifDateTime.stringToDateTime());
                         }
                     }
                     Mp4Directory mp4 = new Mp4Directory();
                     if (mp4.getName().equals(i.getName())) {
-                        givenParam = i.getString(Mp4Directory.TAG_CREATION_TIME);
-                        if (givenParam != null) {
+                        givenParam[1] = i.getString(Mp4Directory.TAG_CREATION_TIME);
+                        if (givenParam[1]  != null) {
                             Mp4DateTime mp4DateTime = new Mp4DateTime(givenParam);
                             fileInfo.set(mp4DateTime.stringToDateTime());
                         }
                     }
                     QuickTimeMetadataDirectory qt = new QuickTimeMetadataDirectory();
                     if (qt.getName().equals(i.getName())) {
-                        givenParam = i.getString(QuickTimeMetadataDirectory.TAG_CREATION_DATE);
-                        if (givenParam != null) {
+                        givenParam[1] = i.getString(QuickTimeMetadataDirectory.TAG_CREATION_DATE);
+                        if (givenParam[1]  != null) {
                             QtDateTime qtDateTime = new QtDateTime(givenParam);
                             fileInfo.set(qtDateTime.stringToDateTime());
                         }
                     }
                     if (FileInfoTypes.Dir_FILE.equals(i.getName())) {
-                        givenParam = i.getString(FileSystemDirectory.TAG_FILE_SIZE);
-                        fileInfo.set(Long.valueOf(givenParam));
+                        givenParam[1] = i.getString(FileSystemDirectory.TAG_FILE_SIZE);
+                        fileInfo.set(Long.valueOf(givenParam[1]));
                         try {
                             fileInfo.set(file);
                         } catch (FileInfoException e) {
@@ -96,10 +96,11 @@ public class GetFileInfo {
             }
             if(fileInfo.getDateTimeTakenLocalDateTime() == LocalDateTime.MIN){
                 System.err.println("Date Taken is empty "+file.toPath());
+                print(metadata, file);
                 for (Directory i : dir) {
                     if (!i.isEmpty()) {
                         if (FileInfoTypes.Dir_FILE.equals(i.getName())) {
-                            givenParam = i.getString(FileSystemDirectory.TAG_FILE_MODIFIED_DATE);
+                            givenParam[1] = i.getString(FileSystemDirectory.TAG_FILE_MODIFIED_DATE);
                             Mp4DateTime mp4DateTime = new Mp4DateTime(givenParam);
                             fileInfo.set(mp4DateTime.stringToDateTime());
                             try {

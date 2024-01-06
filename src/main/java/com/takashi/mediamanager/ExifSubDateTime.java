@@ -3,8 +3,9 @@ package com.takashi.mediamanager;
 import java.time.LocalDateTime;
 
 public class ExifSubDateTime extends DateTimeBase{
-    public ExifSubDateTime (String datetimeIn){
-        datetime = datetimeIn;
+    public ExifSubDateTime (String[] datetimeIn){
+        path = datetimeIn[0];
+        datetime = datetimeIn[1];
     }
     public LocalDateTime stringToDateTime(){
         int index0, index1;
@@ -13,7 +14,7 @@ public class ExifSubDateTime extends DateTimeBase{
         dateDelimiter = checkDelimiter(datetime);
         try {
             if (dateDelimiter == Character.MIN_VALUE) {
-                throw new FileInfoException("EXCEPTION dateTime no delimiter " + datetime + "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime + "\n");
             }
 
             index0 = datetime.indexOf(dateDelimiter);
@@ -25,35 +26,33 @@ public class ExifSubDateTime extends DateTimeBase{
             index0 = index1;
             index1 = datetime.indexOf(' ', index0 + 1);
             if (index1 == -1) {
-                throw new FileInfoException("EXCEPTION dateTime no delimiter between date and time " + datetime + "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime + "\n");
             }
             dayOfMonth = Integer.parseInt(datetime.substring(index0 + 1, index1));
 
             index0 = index1;
             index1 = datetime.indexOf(':', index0 + 1);
             if (index1 == -1) {
-                throw new FileInfoException("EXCEPTION dateTime no delimiter " + datetime + "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime + "\n");
             }
             hour = Integer.parseInt(datetime.substring(index0 + 1, index1));
 
             index0 = index1;
             index1 = datetime.indexOf(':', index0 + 1);
             if (index1 == -1) {
-                throw new FileInfoException("EXCEPTION dateTime no delimiter " + datetime + "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime + "\n");
             }
             minute = Integer.parseInt(datetime.substring(index0 + 1, index1));
             second = Integer.parseInt(datetime.substring(index1 + 1));
 
             //System.out.print(year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second + "\n");
         } catch (IndexOutOfBoundsException e) {
-            Utils.errPrint("stringToDateTime " + datetime + " " + year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second, e);
-            e.printStackTrace();
+            Utils.errPrint(path+" "+this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime + " " + year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second+ "\n");
         } catch (NumberFormatException e) {
-            Utils.errPrint("stringToDateTime " + datetime, e);
-            e.printStackTrace();
-        } catch (FileInfoException e) {
-            Utils.errPrint("stringToDateTime " + datetime, e);
-            e.printStackTrace();
+            Utils.errPrint(path+" "+this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime+ "\n");
+        } catch (DateDelimiterException e) {
+            Utils.errPrint(path);
+            Utils.errPrint(path+" "+this.getClass().getName() + " " + Thread.currentThread().getStackTrace()[1].getMethodName() + " " + Thread.currentThread().getStackTrace()[1].getLineNumber() + " " + datetime + "\n");
         }
         if (month < 1 || month > 12 ||
                 dayOfMonth < 1 || dayOfMonth > 31 ||

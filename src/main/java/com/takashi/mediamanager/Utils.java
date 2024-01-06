@@ -163,6 +163,10 @@ public class Utils {
         e.printStackTrace();
     }
 
+    public static void errPrint(String str){
+        System.err.println("EXCEPTION: " + str + " ");
+    }
+
     public static void printProgress(String str){
         if(funcName == null){
             funcName = str;
