@@ -18,6 +18,7 @@ import com.drew.metadata.mp4.Mp4Directory;
 import java.io.*;
 import java.nio.file.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class GetFileInfo {
@@ -53,7 +54,7 @@ public class GetFileInfo {
         FileInfo fileInfo = new FileInfo(fileInfoval);
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(file);
-            String givenParam[] = new String[2];
+            String[] givenParam = new String[2];
             givenParam[0] = file.getPath();
             Iterable<Directory> dir = metadata.getDirectories();
 
@@ -97,7 +98,8 @@ public class GetFileInfo {
             if(fileInfo.getDateTimeTakenLocalDateTime() == LocalDateTime.MIN){
                 System.err.println("Date Taken is empty "+file.toPath());
                 print(metadata, file);
-                for (Directory i : dir) {
+                fileInfo.setParentDir(getParentDirName(file, dir));
+                /*for (Directory i : dir) {
                     if (!i.isEmpty()) {
                         if (FileInfoTypes.Dir_FILE.equals(i.getName())) {
                             givenParam[1] = i.getString(FileSystemDirectory.TAG_FILE_MODIFIED_DATE);
@@ -110,7 +112,7 @@ public class GetFileInfo {
                             }
                         }
                     }
-                }
+                }*/
             }
             print(metadata, file);
             return fileInfo;
@@ -197,5 +199,25 @@ public class GetFileInfo {
             // File permission problems are caught here.
             System.err.println(x);
         }
+    }
+    private String getParentDirName(File file, Iterable<Directory> dir){
+        String returnValue = null;
+        String[] givenParam = new String[2];
+        givenParam[0] = file.getPath();
+        if(file.getParent()!=null){
+            returnValue = file.getParentFile().getName();
+
+        }else{
+            for (Directory i : dir) {
+                if (!i.isEmpty()) {
+                    if (FileInfoTypes.Dir_FILE.equals(i.getName())) {
+                        givenParam[1] = i.getString(FileSystemDirectory.TAG_FILE_MODIFIED_DATE);
+                        Mp4DateTime mp4DateTime = new Mp4DateTime(givenParam);
+                        returnValue = mp4DateTime.stringToDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    }
+                }
+            }
+        }
+        return  returnValue;
     }
 }

@@ -5,11 +5,15 @@ import com.drew.imaging.FileType;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 //import java.time.Duration;
 //import java.time.LocalDate;
 //import java.time.format.DateTimeFormatter;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -313,6 +317,14 @@ public class FileListUtils extends FileList{
                 }
                 if(fi.getFileType() == FileType.Unknown) {
                     System.err.println("handleUnknownFile no match " + fi.getFileObj().getPath());
+                    try {
+                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                        fi.setParentDir(df.format(Files.readAttributes(fi.getFileObj().toPath(), BasicFileAttributes.class).lastModifiedTime().toMillis()));
+                    }catch (UnsupportedOperationException e){
+                        Utils.errPrint(e);
+                    }catch (IOException e){
+                        Utils.errPrint(e);
+                    }
                 }
             }
         }
