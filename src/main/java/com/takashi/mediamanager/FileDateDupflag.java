@@ -1,7 +1,7 @@
 package com.takashi.mediamanager;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+//import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class FileDateDupflag {
@@ -9,7 +9,7 @@ public class FileDateDupflag {
     private final boolean dupFlag;
     private final String nonDateDirName;
     private final boolean isImage;
-    private String parentDir;
+    private final String parentDir;
 
     /*public FileDateDupflag(LocalDate dateInput, boolean dupInput, String dirname, boolean nonPictureVal){
         date = dateInput;
