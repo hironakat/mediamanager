@@ -99,28 +99,10 @@ public class GetFileInfo {
                 //System.err.println("Date Taken is empty "+file.toPath());
                 print(metadata, file);
                 fileInfo.setParentDir(getParentDirName(file, dir));
-                /*for (Directory i : dir) {
-                    if (!i.isEmpty()) {
-                        if (FileInfoTypes.Dir_FILE.equals(i.getName())) {
-                            givenParam[1] = i.getString(FileSystemDirectory.TAG_FILE_MODIFIED_DATE);
-                            Mp4DateTime mp4DateTime = new Mp4DateTime(givenParam);
-                            fileInfo.set(mp4DateTime.stringToDateTime());
-                            try {
-                                fileInfo.set(file);
-                            } catch (FileInfoException e) {
-                                Utils.errPrint(e);
-                            }
-                        }
-                    }
-                }*/
             }
             print(metadata, file);
             return fileInfo;
-        } catch (ImageProcessingException e) {
-            System.err.println("\n"+file.toPath());
-            Utils.errPrint(e);
-            return fileInfo;
-        } catch (IOException e) {
+        } catch (ImageProcessingException | IOException e) {
             System.err.println("\n"+file.toPath());
             Utils.errPrint(e);
             return fileInfo;
@@ -138,8 +120,7 @@ public class GetFileInfo {
                 returnvalue = true;
             }
         }catch(NullPointerException e){
-            //System.err.println("\n"+fileType.getName());
-            //Utils.errPrint(e);
+            //returnvalue = false;
         }
         return returnvalue;
     }
@@ -155,10 +136,6 @@ public class GetFileInfo {
 
                 for (Directory directory : metadata.getDirectories()) {
                     for (Tag tag : directory.getTags()) {
-                        /*notpicturefileout.write("getDirectoryName\r\n"+tag.getDirectoryName()+ "\r\n");
-                        notpicturefileout.write("getTagName\r\n"+tag.getTagName()+ "\r\n");
-                        notpicturefileout.write("getDescription\r\n"+tag.getDescription()+ "\r\n");*/
-
                         notpicturefileout.write(tag.toString()+ "\r\n");
                         //System.out.println(tag);
                     }

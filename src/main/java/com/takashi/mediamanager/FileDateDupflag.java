@@ -30,7 +30,7 @@ public class FileDateDupflag {
         parentDir = fi.getParentDir();
     }
 
-    public LocalDate getDate(){return date;}
+    //public LocalDate getDate(){return date;}
     //public boolean getDupFlag(){return dupFlag;}
     /*public String getNonDateDirName(){
         return nonDateDirName;
@@ -38,37 +38,24 @@ public class FileDateDupflag {
     //public boolean getnonPicture(){return !isImage;}
     public String getDirName(){
         String dirName;
-        if(!dupFlag && isImage) {
-            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + getFolderName();
-        }else if(!dupFlag && !isImage){
-            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + getFolderName();
-        }else if(dupFlag && isImage){
-            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName();
+        if(isImage){
+            if(!dupFlag) {
+                dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + getFolderName();
+            }else{
+                dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName();
+            }
         }else{
-            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ FileInfoTypes.DuplicateDir + "\\" + getFolderName();
+            if(!dupFlag){
+                dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + getFolderName();
+            }else{
+                dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ FileInfoTypes.DuplicateDir + "\\" + getFolderName();
+            }
         }
 
-        /*if(date.equals(LocalDate.MIN) && !dupFlag && isImage){
-            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DateUnknownDir + "\\"+nonDateDirName;
-        }else if(date.equals(LocalDate.MIN) && !dupFlag && !isImage){
-            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DateUnknownDir + "\\"+nonDateDirName;
-        }else if(!date.equals(LocalDate.MIN) && !dupFlag && isImage) {
-            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + getFolderName();
-        }else if(!date.equals(LocalDate.MIN) && !dupFlag && !isImage){
-            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + getFolderName();
-        }else if(date.equals(LocalDate.MIN) && dupFlag && isImage){
-            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + FileInfoTypes.DateUnknownDir + "\\" + nonDateDirName;
-        }else if(date.equals(LocalDate.MIN) && dupFlag && !isImage){
-            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + FileInfoTypes.DateUnknownDir + "\\" + nonDateDirName;
-        }else if(!date.equals(LocalDate.MIN) && dupFlag && isImage){
-            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName();
-        }else{
-            dirName = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ FileInfoTypes.DuplicateDir + "\\" + getFolderName();
-        }*/
         return dirName;
     }
     private String getFolderName(){
-        String returnValue = null;
+        String returnValue;
         if(!date.toString().equals(LocalDate.MIN.toString())) {
             returnValue = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }else{

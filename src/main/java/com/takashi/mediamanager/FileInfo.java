@@ -114,57 +114,19 @@ public class FileInfo {
         }catch(NullPointerException e){
             if(!duplicate) {
                 path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + getFolderName() + "\\" + fileName;
-            }else if(duplicate) {
+            }else {
                 path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName() + "\\" + fileName;
             }
         }
-
-
-        /*if(!duplicate && getFileType().getMimeType()==null) {
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + getFolderName() + "\\" + fileName;
-        }else if(duplicate && getFileType().getMimeType()==null){
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName()+"\\"+fileName;
-        }else if(!duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)) {
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + getFolderName()+"\\"+fileName;
-        }else if(!duplicate && !getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ getFolderName()+"\\"+fileName;
-        }else if(duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName()+"\\"+fileName;
-        }else{
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ FileInfoTypes.DuplicateDir + "\\" + getFolderName()+"\\"+fileName;
-        }*/
-
-        /*if(dateTaken.equals(LocalDate.MIN) && !duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DateUnknownDir + "\\"+nonDateDirName+"\\"+fileName;
-        }else if(dateTaken.equals(LocalDate.MIN) && !duplicate && !getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DateUnknownDir + "\\"+nonDateDirName+"\\"+fileName;
-        }else if(!dateTaken.equals(LocalDate.MIN) && !duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)) {
-            folderName = dateTaken.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + folderName+"\\"+fileName;
-        }else if(!dateTaken.equals(LocalDate.MIN) && !duplicate && !getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
-            folderName = dateTaken.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + folderName+"\\"+fileName;
-        }else if(dateTaken.equals(LocalDate.MIN) && duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + FileInfoTypes.DateUnknownDir + "\\" + nonDateDirName+"\\"+fileName;
-        }else if(dateTaken.equals(LocalDate.MIN) && duplicate && !getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + FileInfoTypes.DateUnknownDir + "\\" + nonDateDirName+"\\"+fileName;
-        }else if(!dateTaken.equals(LocalDate.MIN) && duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
-            folderName = dateTaken.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + folderName+"\\"+fileName;
-        }else{
-            folderName = dateTaken.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ FileInfoTypes.DuplicateDir + "\\" + folderName+"\\"+fileName;
-        }*/
         return path;
     }
     private String getFolderName(){
-        String returnValue = null;
+        String returnValue;
         if(!dateTaken.toLocalDate().toString().equals(LocalDate.MIN.toString())) {
             returnValue = dateTaken.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }else{
             returnValue = parentDir;
         }
-
         return returnValue;
     }
 
