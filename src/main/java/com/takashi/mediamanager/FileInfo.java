@@ -90,7 +90,7 @@ public class FileInfo {
     public Boolean getDuplicate(){ return duplicate; }
     public Boolean getNonPictureFile(){ return noPictureFile; }
     public File getDuplicateOriginalFile(){return duplicateOrgFile;}
-    public File getDestinationFile(){return destination;}
+    //public File getDestinationFile(){return destination;}
     public Boolean getDestFileExist(){return destFileExist;}
     public String getNonDateDirName(){return nonDateDirName;}
     public Boolean getFileCopied(){return fileCopied;}
@@ -98,7 +98,7 @@ public class FileInfo {
     public String getParentDir(){return parentDir;}
     public String getPath(){
         String path = null;
-        String folderName;
+        //String folderName;
         try {
             if (getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)) {
                 if(!duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)) {
