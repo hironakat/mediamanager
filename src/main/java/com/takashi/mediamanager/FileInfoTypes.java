@@ -13,7 +13,7 @@ public class FileInfoTypes {
     final static String imageMimeTag = "image/";
     final static String Dir_FILE = "File";
 
-    final static String RootDir = "D:\\phone";  //original folder
+    final static String RootDir = "D:\\Public Pictures";  //original folder
     final static String OutputDir = "D:\\Output";
     final static String DuplicateDir = "duplicate";
     final static String VideoDir = "Public Videos";

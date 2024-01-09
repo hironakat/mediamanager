@@ -14,7 +14,7 @@ public class ExifSubDateTime extends DateTimeBase{
         dateDelimiter = checkDelimiter(datetime);
         try {
             if (dateDelimiter == Character.MIN_VALUE) {
-                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime + "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime);
             }
 
             index0 = datetime.indexOf(dateDelimiter);
@@ -26,21 +26,21 @@ public class ExifSubDateTime extends DateTimeBase{
             index0 = index1;
             index1 = datetime.indexOf(' ', index0 + 1);
             if (index1 == -1) {
-                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime + "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime);
             }
             dayOfMonth = Integer.parseInt(datetime.substring(index0 + 1, index1));
 
             index0 = index1;
             index1 = datetime.indexOf(':', index0 + 1);
             if (index1 == -1) {
-                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime + "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime);
             }
             hour = Integer.parseInt(datetime.substring(index0 + 1, index1));
 
             index0 = index1;
             index1 = datetime.indexOf(':', index0 + 1);
             if (index1 == -1) {
-                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime + "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime);
             }
             minute = Integer.parseInt(datetime.substring(index0 + 1, index1));
             second = Integer.parseInt(datetime.substring(index1 + 1));
@@ -51,8 +51,7 @@ public class ExifSubDateTime extends DateTimeBase{
         } catch (NumberFormatException e) {
             Utils.errPrint(path+" "+this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime+ "\n");
         } catch (DateDelimiterException e) {
-            Utils.errPrint(path);
-            Utils.errPrint(path+" "+this.getClass().getName() + " " + Thread.currentThread().getStackTrace()[1].getMethodName() + " " + Thread.currentThread().getStackTrace()[1].getLineNumber() + " " + datetime + "\n");
+            Utils.errPrint(path+" "+e+"\n");
         }
         if (month < 1 || month > 12 ||
                 dayOfMonth < 1 || dayOfMonth > 31 ||

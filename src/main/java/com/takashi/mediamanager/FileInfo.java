@@ -97,17 +97,42 @@ public class FileInfo {
     public FileType getFileType(){return fileType;}
     public String getParentDir(){return parentDir;}
     public String getPath(){
-        String path;
+        String path = null;
         String folderName;
-        if(!duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)) {
+        try {
+            if (getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)) {
+                if(!duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)) {
+                    path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + getFolderName()+"\\"+fileName;
+                }else if(!duplicate && !getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
+                    path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ getFolderName()+"\\"+fileName;
+                }else if(duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
+                    path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName()+"\\"+fileName;
+                }else{
+                    path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ FileInfoTypes.DuplicateDir + "\\" + getFolderName()+"\\"+fileName;
+                }
+            }
+        }catch(NullPointerException e){
+            if(!duplicate) {
+                path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + getFolderName() + "\\" + fileName;
+            }else if(duplicate) {
+                path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName() + "\\" + fileName;
+            }
+        }
+
+
+        /*if(!duplicate && getFileType().getMimeType()==null) {
+            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + getFolderName() + "\\" + fileName;
+        }else if(duplicate && getFileType().getMimeType()==null){
+            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName()+"\\"+fileName;
+        }else if(!duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)) {
             path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + getFolderName()+"\\"+fileName;
         }else if(!duplicate && !getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
-            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + getFolderName()+"\\"+fileName;
+            path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ getFolderName()+"\\"+fileName;
         }else if(duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
             path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName()+"\\"+fileName;
         }else{
             path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ FileInfoTypes.DuplicateDir + "\\" + getFolderName()+"\\"+fileName;
-        }
+        }*/
 
         /*if(dateTaken.equals(LocalDate.MIN) && !duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
             path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DateUnknownDir + "\\"+nonDateDirName+"\\"+fileName;

@@ -22,7 +22,11 @@ public class FileDateDupflag {
         date = fi.getDateTaken();
         dupFlag = fi.getDuplicate();
         nonDateDirName = fi.getNonDateDirName();
-        isImage = fi.getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag);
+        if(fi.getFileType().getMimeType()!=null){
+            isImage = fi.getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag);
+        }else{
+            isImage = false;
+        }
         parentDir = fi.getParentDir();
     }
 

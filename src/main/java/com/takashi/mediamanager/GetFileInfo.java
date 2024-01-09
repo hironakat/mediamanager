@@ -96,7 +96,7 @@ public class GetFileInfo {
                 }
             }
             if(fileInfo.getDateTimeTakenLocalDateTime() == LocalDateTime.MIN){
-                System.err.println("Date Taken is empty "+file.toPath());
+                //System.err.println("Date Taken is empty "+file.toPath());
                 print(metadata, file);
                 fileInfo.setParentDir(getParentDirName(file, dir));
                 /*for (Directory i : dir) {

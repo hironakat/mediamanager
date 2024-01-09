@@ -33,20 +33,20 @@ public class QtDateTime extends DateTimeBase{
             index0 = index1;
             index1 = datetime.indexOf(':', index0 + 1);
             if (index1 == -1) {
-                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+"stringToDateTime6 EXCEPTION dateTime no delimiter " + datetime + "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+"stringToDateTime6 EXCEPTION dateTime no delimiter " + datetime);
             }
             hour = Integer.parseInt(datetime.substring(index0 + 1, index1));
 
             index0 = index1;
             index1 = datetime.indexOf(':', index0 + 1);
             if (index1 == -1) {
-                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+"stringToDateTime5 EXCEPTION dateTime no delimiter " + datetime + "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+"stringToDateTime5 EXCEPTION dateTime no delimiter " + datetime);
             }
             minute = Integer.parseInt(datetime.substring(index0 + 1, index1));
             index0 = index1;
             index1 = datetime.indexOf('-', index0 + 1);
             if (index1 == -1) {
-                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+"stringToDateTime4 EXCEPTION dateTime no delimiter " + datetime + "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+"stringToDateTime4 EXCEPTION dateTime no delimiter " + datetime);
             }
             second = Integer.parseInt(datetime.substring(index0 + 1, index1));
 
@@ -58,8 +58,7 @@ public class QtDateTime extends DateTimeBase{
             Utils.errPrint(path+" "+this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+"stringToDateTime2 " + datetime + "\n");
             //e.printStackTrace();
         } catch (DateDelimiterException e) {
-            Utils.errPrint(path+" "+this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+"stringToDateTime3" + datetime + "\n");
-            //e.printStackTrace();
+            Utils.errPrint(path+" "+e+"\n");
         }
         if (month < 1 || month > 12 ||
                 dayOfMonth < 1 || dayOfMonth > 31 ||

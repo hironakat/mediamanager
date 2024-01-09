@@ -103,31 +103,30 @@ public class Utils {
     public static void mkDateDir(FileDateDupflag dupFlag) {
         //String folderName;
         //String dirName;
-        Path imageDupDir, videoDupDir, imageDnDir, videoDnDir;
+        Path path;
 
-        imageDupDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir);
-        if(!formerPathList.contains(imageDupDir)) {
-            mkDateDir(imageDupDir);
+        path = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir);
+        if(!formerPathList.contains(path)) {
+            mkDateDir(path);
             //dupDir.toFile().mkdir();
-            formerPathList.add(imageDupDir);
+            formerPathList.add(path);
         }
-        imageDnDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DateUnknownDir);
-        if(!formerPathList.contains(imageDnDir)) {
-            mkDateDir(imageDnDir);
-            formerPathList.add(imageDnDir);
+        path = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DateUnknownDir);
+        if(!formerPathList.contains(path)) {
+            mkDateDir(path);
+            formerPathList.add(path);
         }
-        videoDupDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir);
-        if(!formerPathList.contains(videoDupDir)) {
-            mkDateDir(videoDupDir);
+        path = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir);
+        if(!formerPathList.contains(path)) {
+            mkDateDir(path);
             //dupDir.toFile().mkdir();
-            formerPathList.add(videoDupDir);
+            formerPathList.add(path);
         }
-        videoDnDir = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DateUnknownDir);
-        if(!formerPathList.contains(videoDnDir)) {
-            mkDateDir(videoDnDir);
-            formerPathList.add(videoDnDir);
+        path = Paths.get(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DateUnknownDir);
+        if(!formerPathList.contains(path)) {
+            mkDateDir(path);
+            formerPathList.add(path);
         }
-
         Path dir = Paths.get(dupFlag.getDirName()+"\\");
         mkDateDir(dir);
     }
