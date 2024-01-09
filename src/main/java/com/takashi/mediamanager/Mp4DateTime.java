@@ -68,13 +68,13 @@ public class Mp4DateTime extends DateTimeBase{
 
             //System.out.print(year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second + "\n");
         } catch (IndexOutOfBoundsException e) {
-            Utils.errPrint(path+" "+this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime + " " + year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second+"\n");
+            Utils.errPrint(path+" "+this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime + " " + year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second);
             //e.printStackTrace();
         } catch (NumberFormatException e) {
-            Utils.errPrint(path+" "+this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+ datetime+"\n");
+            Utils.errPrint(path+" "+this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+ datetime);
             //e.printStackTrace();
         } catch (DateDelimiterException e) {
-            Utils.errPrint(path+" "+e+"\n");
+            Utils.errPrint(path+" "+e);
         }
         if (month < 1 || month > 12 ||
                 dayOfMonth < 1 || dayOfMonth > 31 ||

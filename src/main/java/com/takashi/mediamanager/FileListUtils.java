@@ -147,62 +147,24 @@ public class FileListUtils extends FileList{
         String dirName;
         while (fileInfoIterator.hasNext()) {
             FileInfo originalFile = fileInfoIterator.next();
-            //if (/*!originalFile.getNonPictureFile() &&*/ !originalFile.getDuplicate()) {
-                /*LocalDate ld = originalFile.getDateTaken();
-                if(ld.equals(LocalDate.MIN)) {
-                    dirName = new String(FileInfoTypes.OutputDir + "\\" + "DateUnknown"+"\\"+originalFile.getNonDateDirName());
-                } else {
-                    dirName = new String(FileInfoTypes.OutputDir + "\\" + ld.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                }*/
+            File fileOut = new File(originalFile.getPath());
+            if(!fileOut.exists()) {
+                try {
+                    FileChannel orgFile = new FileInputStream(originalFile.getFileObj()).getChannel();
+                    FileChannel destFile = new FileOutputStream(fileOut).getChannel();
 
-                //File fileOut = new File(dirName+"\\"+originalFile.getFileName());
-                File fileOut = new File(originalFile.getPath());
-                if(!fileOut.exists()) {
-                    try {
-                        FileChannel orgFile = new FileInputStream(originalFile.getFileObj()).getChannel();
-                        FileChannel destFile = new FileOutputStream(fileOut).getChannel();
-
-                        orgFile.transferTo(0, orgFile.size(), destFile);
-                        originalFile.setDestination(fileOut);
-                        originalFile.setFileCopied(true);
-                        destFile.close();
-                        orgFile.close();
-                    }catch(IOException e){
-                        Utils.errPrint(e);
-                    }
-                }else{
+                    orgFile.transferTo(0, orgFile.size(), destFile);
                     originalFile.setDestination(fileOut);
-                    originalFile.setDestFileExist(true);
+                    originalFile.setFileCopied(true);
+                    destFile.close();
+                    orgFile.close();
+                }catch(IOException e){
+                    Utils.errPrint(e);
                 }
-            //}else if (/*!originalFile.getNonPictureFile() &&*/ originalFile.getDuplicate()) {
-                /*LocalDate ld = originalFile.getDateTaken();
-                if(ld.equals(LocalDate.MIN)) {
-                    dirName = new String(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.DuplicateDir + "\\" + "DateUnknown"+"\\"+originalFile.getNonDateDirName());
-                } else {
-                    dirName = new String(FileInfoTypes.OutputDir + "\\"+FileInfoTypes.DuplicateDir + "\\" + ld.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                }
-
-                File fileOut = new File(dirName+"\\"+originalFile.getFileName());
-                if(!fileOut.exists()) {
-                    try {
-                        FileChannel orgFile = new FileInputStream(originalFile.getFileObj()).getChannel();
-                        FileChannel destFile = new FileOutputStream(fileOut).getChannel();
-
-                        orgFile.transferTo(0, orgFile.size(), destFile);
-
-                        destFile.close();
-                        orgFile.close();
-
-                        originalFile.setDestination(fileOut);
-                        originalFile.setFileCopied(true);
-                    }catch(IOException e){
-                        Utils.errPrint(e);
-                    }
-                }else{
-                    originalFile.setDestination(fileOut);
-                    originalFile.setDestFileExist(true);
-                }
-            }*/
+            }else{
+                originalFile.setDestination(fileOut);
+                originalFile.setDestFileExist(true);
+            }
             Utils.printProgress("fileCopy");
         }
     }
