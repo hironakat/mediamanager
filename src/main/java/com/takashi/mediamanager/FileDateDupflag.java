@@ -11,12 +11,6 @@ public class FileDateDupflag {
     private final boolean isImage;
     private final String parentDir;
 
-    /*public FileDateDupflag(LocalDate dateInput, boolean dupInput, String dirname, boolean nonPictureVal){
-        date = dateInput;
-        dupFlag = dupInput;
-        nonDateDirName = dirname;
-        isImage = !nonPictureVal;
-    }*/
 
     public FileDateDupflag(FileInfo fi){
         date = fi.getDateTaken();

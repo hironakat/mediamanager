@@ -189,7 +189,7 @@ public class Utils {
         fileCount++;
     }
 
-    private static int getNumOfFiles(String dirPath) {
+    /*private static int getNumOfFiles(String dirPath) {
         int count = 0;
         File f = new File(dirPath);
         File[] files = f.listFiles();
@@ -205,7 +205,5 @@ public class Utils {
             }
         }
         return count;
-    }
-
-
+    }*/
 }

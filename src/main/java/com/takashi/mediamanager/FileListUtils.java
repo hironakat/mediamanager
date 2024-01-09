@@ -1,16 +1,11 @@
 package com.takashi.mediamanager;
 
 import com.drew.imaging.FileType;
-//import com.google.common.io.Files;
-
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-//import java.time.Duration;
-//import java.time.LocalDate;
-//import java.time.format.DateTimeFormatter;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -31,11 +26,8 @@ public class FileListUtils extends FileList{
         List<FileDateDupflag> datelist = new ArrayList<FileDateDupflag>();
         while (fileInfoIterator.hasNext()) {
             FileInfo fi = fileInfoIterator.next();
-            //if(!fi.getNonPictureFile()) {
-                //FileDateDupflag fileDateDupflag = new FileDateDupflag(fi.getDateTaken(), fi.getDuplicate(), fi.getNonDateDirName(),fi.getNonPictureFile());
             FileDateDupflag fileDateDupflag = new FileDateDupflag(fi);
             datelist.add(fileDateDupflag);
-            //}
         }
         Set<FileDateDupflag> hs = new HashSet<FileDateDupflag>();
         hs.addAll(datelist);
@@ -60,52 +52,23 @@ public class FileListUtils extends FileList{
 
         while (fileInfoIterator.hasNext()) {
             FileInfo originalFile = fileInfoIterator.next();
-            //if(!originalFile.getNonPictureFile()) {
-                fileInfoIteratorCheck = filelist.listIterator(fileInfoIterator.nextIndex());
-                fileInfoIteratorCheck.forEachRemaining(targetFile -> {
-                    if(originalFile.getFileSize() == targetFile.getFileSize()){
-                        try {
-                            if (java.nio.file.Files.mismatch(originalFile.getFileObj().toPath(), targetFile.getFileObj().toPath()) == -1L) {
-                                targetFile.setDuplicate(true);
-                                targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
-                            }
-                        } catch (IOException e) {
-                            Utils.errPrint(e);
+            fileInfoIteratorCheck = filelist.listIterator(fileInfoIterator.nextIndex());
+            fileInfoIteratorCheck.forEachRemaining(targetFile -> {
+                if(originalFile.getFileSize() == targetFile.getFileSize()){
+                    try {
+                        if (java.nio.file.Files.mismatch(originalFile.getFileObj().toPath(), targetFile.getFileObj().toPath()) == -1L) {
+                            targetFile.setDuplicate(true);
+                            targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
                         }
+                    } catch (IOException e) {
+                        Utils.errPrint(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber());
+                        Utils.errPrint((originalFile.getFileObj().getPath()));
+                        Utils.errPrint((targetFile.getFileObj().getPath()));
+                        Utils.errPrint(e);
                     }
-                    /*int pos = originalFile.getFileName().indexOf('.');
-                    StringBuilder sborg = new StringBuilder(originalFile.getFileName());
-                    targetFileNameVariation.add(sborg.insert(pos, " copy").toString());
-                    sborg = new StringBuilder(originalFile.getFileName());
+                }
+            });
 
-                    for (int i = 1; i < 10; i++) {
-                        targetFileNameVariation.add(sborg.insert(pos, " (" + String.valueOf(i) + ")").toString());
-                        sborg = new StringBuilder(originalFile.getFileName());
-                    }
-
-                    if (originalFile.getFileName().equalsIgnoreCase(targetFile.getFileName()) ||
-                            targetFileNameVariation.get(0).equalsIgnoreCase(targetFile.getFileName()) ||
-                            targetFileNameVariation.get(1).equalsIgnoreCase(targetFile.getFileName()) ||
-                            targetFileNameVariation.get(2).equalsIgnoreCase(targetFile.getFileName()) ||
-                            targetFileNameVariation.get(3).equalsIgnoreCase(targetFile.getFileName()) ||
-                            targetFileNameVariation.get(4).equalsIgnoreCase(targetFile.getFileName()) ||
-                            targetFileNameVariation.get(5).equalsIgnoreCase(targetFile.getFileName()) ||
-                            targetFileNameVariation.get(6).equalsIgnoreCase(targetFile.getFileName()) ||
-                            targetFileNameVariation.get(7).equalsIgnoreCase(targetFile.getFileName()) ||
-                            targetFileNameVariation.get(8).equalsIgnoreCase(targetFile.getFileName()) ||
-                            targetFileNameVariation.get(9).equalsIgnoreCase(targetFile.getFileName())) {
-                        try {
-                            if (Files.equal(originalFile.getFileObj(), targetFile.getFileObj())) {
-                                targetFile.setDuplicate(true);
-                                targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
-                            }
-                        } catch (IOException e) {
-                            Utils.errPrint(e);
-                        }
-                    }
-                    targetFileNameVariation.clear();*/
-                });
-            //}
             Utils.printProgress("duplicateCheck");
         }
 
@@ -159,6 +122,7 @@ public class FileListUtils extends FileList{
                     destFile.close();
                     orgFile.close();
                 }catch(IOException e){
+
                     Utils.errPrint(e);
                 }
             }else{
@@ -282,9 +246,7 @@ public class FileListUtils extends FileList{
                     try {
                         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                         fi.setParentDir(df.format(Files.readAttributes(fi.getFileObj().toPath(), BasicFileAttributes.class).lastModifiedTime().toMillis()));
-                    }catch (UnsupportedOperationException e){
-                        Utils.errPrint(e);
-                    }catch (IOException e){
+                    }catch (UnsupportedOperationException | IOException e){
                         Utils.errPrint(e);
                     }
                 }
