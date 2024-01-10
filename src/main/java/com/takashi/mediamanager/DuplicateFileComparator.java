@@ -11,8 +11,8 @@ public class DuplicateFileComparator implements Comparator<DuplicateFiles>{
             p1 = new DuplicateFiles("dupFile error","dupFile error");
         }else if(p1.getOrginalFile() == null){
             p1.setFiles("orgFile error","orgFile error");
-        }else if(p2.getOrginalFile() == null){
-            p2.setFiles("orgFile error","orgFile error");
+        }else if(p2.getDuplicateFile() == null){
+            p2.setFiles("orgFile error","dupFile error");
         }
         return p1.getOrginalFile().compareTo(p2.getDuplicateFile());
     }
