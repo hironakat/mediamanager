@@ -9,7 +9,7 @@ public class DuplicateFileComparator implements Comparator<DuplicateFiles>{
             p1 = new DuplicateFiles("orgFile error","orgFile error");
         }
         if(p2 == null){
-            p1 = new DuplicateFiles("dupFile error","dupFile error");
+            p2 = new DuplicateFiles("dupFile error","dupFile error");
         }
         if(p1.getOrginalFile() == null){
             p1.setFiles("orgFile error","orgFile error");
