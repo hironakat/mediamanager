@@ -1,5 +1,7 @@
 package com.takashi.mediamanager;
 
+import com.drew.imaging.FileType;
+
 import java.time.LocalDate;
 //import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +20,8 @@ public class FileDateDupflag {
         nonDateDirName = fi.getNonDateDirName();
         if(fi.getFileType().getMimeType()!=null){
             isImage = fi.getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag);
+        }else if(fi.getFileType() == FileType.Arw) {
+            isImage = true;
         }else{
             isImage = false;
         }

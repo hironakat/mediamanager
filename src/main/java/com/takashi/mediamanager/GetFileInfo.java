@@ -118,6 +118,8 @@ public class GetFileInfo {
         try {
             if (fileType.getMimeType().contains(FileInfoTypes.imageMimeTag)) {
                 returnvalue = true;
+            }else if(fileType == FileType.Arw){
+                returnvalue = true;
             }
         }catch(NullPointerException e){
             //returnvalue = false;

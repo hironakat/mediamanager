@@ -99,7 +99,8 @@ public class FileInfo {
     public String getPath(){
         String path = null;
         //String folderName;
-        try {
+
+        if(getFileType().getMimeType() != null){
             if(!duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)) {
                 path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + getFolderName()+"\\"+fileName;
             }else if(!duplicate && !getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
@@ -109,10 +110,14 @@ public class FileInfo {
             }else{
                 path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ FileInfoTypes.DuplicateDir + "\\" + getFolderName()+"\\"+fileName;
             }
-        }catch(NullPointerException e){
-            if(!duplicate) {
-                path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + getFolderName() + "\\" + fileName;
-            }else {
+        }else{
+            if(!duplicate && getFileType() == FileType.Arw) {
+                path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + getFolderName()+"\\"+fileName;
+            }else if(duplicate && getFileType() == FileType.Arw){
+                path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName()+"\\"+fileName;
+            }else if(!duplicate) {
+                path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ getFolderName()+"\\"+fileName;
+            }else{
                 path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName() + "\\" + fileName;
             }
         }
