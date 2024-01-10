@@ -108,9 +108,20 @@ public class FileListUtils extends FileList{
     public void fileCopy()  {
         Iterator<FileInfo> fileInfoIterator = filelist.iterator();
         String dirName;
+        File fileOut;
         while (fileInfoIterator.hasNext()) {
             FileInfo originalFile = fileInfoIterator.next();
-            File fileOut = new File(originalFile.getPath());
+            try {
+                fileOut = new File(originalFile.getPath());
+            }catch(NullPointerException e){
+                Utils.errPrint(originalFile.getFileObj().getPath(), e);
+                if(originalFile.getFileType().getMimeType()!=null){
+                    Utils.errPrint(originalFile.getDuplicate()+" "+originalFile.getFileType().getMimeType()+" "+originalFile.getPath());
+                }else{
+                    Utils.errPrint(originalFile.getDuplicate()+" getMimeType NULL");
+                }
+                return;
+            }
             if(!fileOut.exists()) {
                 try {
                     FileChannel orgFile = new FileInputStream(originalFile.getFileObj()).getChannel();
@@ -203,7 +214,7 @@ public class FileListUtils extends FileList{
     }
 
     public long getNumberOfFiles(){
-        long numOfFiles = 0l;
+        long numOfFiles = 0L;
         try {
             Stream<Path> fileList = java.nio.file.Files.walk(Paths.get(FileInfoTypes.RootDir)).filter(java.nio.file.Files::isRegularFile);
             numOfFiles = fileList.count();

@@ -100,16 +100,14 @@ public class FileInfo {
         String path = null;
         //String folderName;
         try {
-            if (getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)) {
-                if(!duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)) {
-                    path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + getFolderName()+"\\"+fileName;
-                }else if(!duplicate && !getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
-                    path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ getFolderName()+"\\"+fileName;
-                }else if(duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
-                    path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName()+"\\"+fileName;
-                }else{
-                    path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ FileInfoTypes.DuplicateDir + "\\" + getFolderName()+"\\"+fileName;
-                }
+            if(!duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)) {
+                path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + getFolderName()+"\\"+fileName;
+            }else if(!duplicate && !getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
+                path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ getFolderName()+"\\"+fileName;
+            }else if(duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)){
+                path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName()+"\\"+fileName;
+            }else{
+                path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\"+ FileInfoTypes.DuplicateDir + "\\" + getFolderName()+"\\"+fileName;
             }
         }catch(NullPointerException e){
             if(!duplicate) {
@@ -181,11 +179,8 @@ public class FileInfo {
             return false;
         }else{
             fi=(FileInfo)obj;
-            if(this.getDuplicate().equals(fi.getDuplicate())){
-                return true;
-            }
+            return this.getDuplicate().equals(fi.getDuplicate());
         }
-        return false;
     }
     private void setNonDateDirName(){
         Path path = Paths.get(getFilePath());
