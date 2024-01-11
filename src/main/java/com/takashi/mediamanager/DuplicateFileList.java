@@ -28,7 +28,11 @@ public class DuplicateFileList {
     }
 
     public DuplicateFileList dupSort(){
-        Collections.sort(duplicateFilelist, new DuplicateFileComparator());
+        try {
+            Collections.sort(duplicateFilelist, new DuplicateFileComparator());
+        }catch(IllegalArgumentException e){
+            Utils.errPrint(e);
+        }
         return this;
     }
 
