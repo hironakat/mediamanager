@@ -3,8 +3,8 @@ package com.takashi.mediamanager;
 import javax.swing.*;
 
 public class CountWindow {
-    JFrame frame = new JFrame("Counter");
-    JTextField countwindow=new JTextField("");
+    final JFrame frame = new JFrame("Counter");
+    final JTextField countwindow=new JTextField("");
 
     public CountWindow(){
         countwindow.setBounds(50,50, 200,30);

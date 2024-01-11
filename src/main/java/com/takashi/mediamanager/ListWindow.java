@@ -7,13 +7,16 @@ import java.awt.*;
 
 public class ListWindow extends FileList  {
 
-    private static final long serialVersionUID = 1L;
-    private JTable list;
-    static GraphicsConfiguration gc;
-    JFrame dupListwindow, orgImgWindow, dupImageWindow;
-    Image   orgImg, dupImg;
-    static PictureDisplay orgCanv;
-    static PictureDisplay dupCanv;
+    //private static final long serialVersionUID = 1L;
+    private static JTable list;
+    private final static  String[] columnName = {"Original","Duplicate"};
+    private static GraphicsConfiguration gc;
+    private final JFrame dupListwindow, orgImgWindow, dupImageWindow;
+    //private Image   orgImg, dupImg;
+    private static PictureDisplay orgCanv;
+    private static PictureDisplay dupCanv;
+    private static JScrollPane scrPane;
+    private static ListSelectionModel cellSelectionModel;
 
     public ListWindow(){
         super();
@@ -32,12 +35,19 @@ public class ListWindow extends FileList  {
 
         orgCanv = null;
         dupCanv = null;
-    }
-    public void setList(DuplicateFileList data){
-        String[] columnName = {"Original","Duplicate"};
-        list = new JTable(data.toStringArray(), columnName);
 
-        ListSelectionModel cellSelectionModel = list.getSelectionModel();
+    }
+
+
+    public void setList(DuplicateFileList data){
+        list = new JTable(data.toStringArray(), columnName);
+    }
+
+    public void dispList(){
+        //String[] columnName = {"Original","Duplicate"};
+        //list = new JTable(data.toStringArray(), columnName);
+
+        cellSelectionModel = list.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
@@ -49,12 +59,11 @@ public class ListWindow extends FileList  {
 
                 }
             }
-
         });
 
         dupListwindow.add(list,BorderLayout.CENTER);
         dupListwindow.setSize(new Dimension(1000,200));
-        JScrollPane scrPane = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrPane = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         dupListwindow.getContentPane().add(scrPane);
     }
     public void close(){

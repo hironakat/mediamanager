@@ -18,6 +18,7 @@ import com.drew.metadata.mp4.Mp4Directory;
 import java.io.*;
 import java.nio.file.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class GetFileInfo {
@@ -53,7 +54,7 @@ public class GetFileInfo {
         FileInfo fileInfo = new FileInfo(fileInfoval);
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(file);
-            String givenParam[] = new String[2];
+            String[] givenParam = new String[2];
             givenParam[0] = file.getPath();
             Iterable<Directory> dir = metadata.getDirectories();
 
@@ -95,135 +96,37 @@ public class GetFileInfo {
                 }
             }
             if(fileInfo.getDateTimeTakenLocalDateTime() == LocalDateTime.MIN){
-                System.err.println("Date Taken is empty "+file.toPath());
+                //System.err.println("Date Taken is empty "+file.toPath());
                 print(metadata, file);
-                for (Directory i : dir) {
-                    if (!i.isEmpty()) {
-                        if (FileInfoTypes.Dir_FILE.equals(i.getName())) {
-                            givenParam[1] = i.getString(FileSystemDirectory.TAG_FILE_MODIFIED_DATE);
-                            Mp4DateTime mp4DateTime = new Mp4DateTime(givenParam);
-                            fileInfo.set(mp4DateTime.stringToDateTime());
-                            try {
-                                fileInfo.set(file);
-                            } catch (FileInfoException e) {
-                                Utils.errPrint(e);
-                            }
-                        }
-                    }
-                }
+                fileInfo.setParentDir(getParentDirName(file, dir));
             }
-            //print(metadata, file);
+            print(metadata, file);
             return fileInfo;
-        } catch (ImageProcessingException e) {
-            System.err.println("\n"+file.toPath());
-            Utils.errPrint(e);
-            return fileInfo;
-        } catch (IOException e) {
+        } catch (ImageProcessingException | IOException e) {
             System.err.println("\n"+file.toPath());
             Utils.errPrint(e);
             return fileInfo;
         }
     }
+
+    /*private FileInfo processUnknownFileInfo(File file, FileInfo fileInfoval){
+        FileInfo fileInfo = new FileInfo(fileInfoval);
+        return fileInfo;
+    }*/
     private boolean ifPictureFile(FileType fileType){
         boolean returnvalue = false;
         try {
             if (fileType.getMimeType().contains(FileInfoTypes.imageMimeTag)) {
                 returnvalue = true;
+            }else if(fileType == FileType.Arw){
+                returnvalue = true;
             }
         }catch(NullPointerException e){
-            //System.err.println("\n"+fileType.getName());
-            //Utils.errPrint(e);
+            //returnvalue = false;
         }
         return returnvalue;
     }
 
-    /*private LocalDateTime stringToDateTime(String datetime) {
-        int index0, index1;
-        int year = 0, month = 0, dayOfMonth = 0, hour = 0, minute = 0, second = 0;
-        char dateDelimiter;
-        //System.out.print(datetime.indexOf(':'));
-        dateDelimiter = checkDateDelimiter(datetime);
-        try{
-            if(dateDelimiter ==  Character.MIN_VALUE){
-                throw new FileInfoException("EXCEPTION dateTime no delimiter " + datetime+"\n");
-            }
-
-            index0 = datetime.indexOf(dateDelimiter);
-            year = Integer.parseInt(datetime.substring(0, index0));
-
-            index1 = datetime.indexOf(dateDelimiter, index0 + 1);
-            month = Integer.parseInt(datetime.substring(index0 + 1, index1));
-
-            index0 = index1;
-            index1 = datetime.indexOf(' ', index0 + 1);
-            if (index1 == -1){
-                throw new FileInfoException("EXCEPTION dateTime no delimiter between date and time " + datetime+"\n");
-            }
-            dayOfMonth = Integer.parseInt(datetime.substring(index0 + 1, index1));
-
-            index0 = index1;
-            index1 = datetime.indexOf(':', index0 + 1);
-            if(index1 == -1){
-                throw new FileInfoException("EXCEPTION dateTime no delimiter " + datetime+"\n");
-            }
-            hour = Integer.parseInt(datetime.substring(index0 + 1, index1));
-
-            index0 = index1;
-            index1 = datetime.indexOf(':', index0 + 1);
-            if(index1 == -1){
-                throw new FileInfoException("EXCEPTION dateTime no delimiter " + datetime+"\n");
-            }
-            minute = Integer.parseInt(datetime.substring(index0 + 1, index1));
-            second = Integer.parseInt(datetime.substring(index1 + 1));
-
-            //System.out.print(year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second + "\n");
-        } catch (IndexOutOfBoundsException e) {
-            Utils.errPrint("stringToDateTime "+datetime+" "+year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second, e);
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
-            Utils.errPrint("stringToDateTime "+datetime, e);
-            e.printStackTrace();
-        } catch (FileInfoException e) {
-            Utils.errPrint("stringToDateTime "+datetime, e);
-            e.printStackTrace();
-        }
-        if(month<1 || month >12 ||
-           dayOfMonth<1 ||dayOfMonth>31||
-           hour<0||hour>23||
-           minute<0||minute>59||
-           second<0||second>59){
-            //System.err. print("stringToDateTime "+year + " " + month + " " + dayOfMonth + " " + hour + " " + minute + " " + second+"\n");
-            year = -999999999;
-            month = 1;
-            dayOfMonth = 1;
-            hour = 0;
-            minute = 0;
-            second = 0;
-
-        }
-        return LocalDateTime.of(year, month, dayOfMonth, hour, minute, second);
-    }
-
-    private char checkDateDelimiter(String dateTime){
-        char delimiter = Character.MIN_VALUE;
-        int index0, index1;
-
-        index0 = dateTime.indexOf(':');
-        index1 = dateTime.indexOf('/');
-
-        if(index0 == -1 && index1 == -1){
-            System.err.print("no delimiter found "+dateTime);
-        }else if(index0 == -1){
-            delimiter = '/';
-        }else if(index1 == -1){
-            delimiter = ':';
-        }else if(index0>index1){
-            delimiter = '/';
-        }else if(index0<index1){
-            delimiter = ':';
-        }
-        return delimiter;
-    }*/
     private static void print(Metadata metadata, File file)
     {
         BufferedWriter notpicturefileout = null;
@@ -235,10 +138,6 @@ public class GetFileInfo {
 
                 for (Directory directory : metadata.getDirectories()) {
                     for (Tag tag : directory.getTags()) {
-                        /*notpicturefileout.write("getDirectoryName\r\n"+tag.getDirectoryName()+ "\r\n");
-                        notpicturefileout.write("getTagName\r\n"+tag.getTagName()+ "\r\n");
-                        notpicturefileout.write("getDescription\r\n"+tag.getDescription()+ "\r\n");*/
-
                         notpicturefileout.write(tag.toString()+ "\r\n");
                         //System.out.println(tag);
                     }
@@ -279,5 +178,25 @@ public class GetFileInfo {
             // File permission problems are caught here.
             System.err.println(x);
         }
+    }
+    private String getParentDirName(File file, Iterable<Directory> dir){
+        String returnValue = null;
+        String[] givenParam = new String[2];
+        givenParam[0] = file.getPath();
+        if(file.getParent()!=null){
+            returnValue = file.getParentFile().getName();
+
+        }else{
+            for (Directory i : dir) {
+                if (!i.isEmpty()) {
+                    if (FileInfoTypes.Dir_FILE.equals(i.getName())) {
+                        givenParam[1] = i.getString(FileSystemDirectory.TAG_FILE_MODIFIED_DATE);
+                        Mp4DateTime mp4DateTime = new Mp4DateTime(givenParam);
+                        returnValue = mp4DateTime.stringToDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    }
+                }
+            }
+        }
+        return  returnValue;
     }
 }

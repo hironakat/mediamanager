@@ -3,10 +3,10 @@ package com.takashi.mediamanager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+//import java.util.ListIterator;
 
 public class DuplicateFileList {
-    private static List<DuplicateFiles> duplicateFilelist = new ArrayList<DuplicateFiles>();
+    private final /*static*/ List<DuplicateFiles> duplicateFilelist = new ArrayList<DuplicateFiles>();
 
     public void add(String orgFile, String dupFile){
         duplicateFilelist.add(new DuplicateFiles(orgFile, dupFile));
@@ -28,7 +28,11 @@ public class DuplicateFileList {
     }
 
     public DuplicateFileList dupSort(){
-        Collections.sort(duplicateFilelist, new DuplicateFileComparator());
+        try {
+            Collections.sort(duplicateFilelist, new DuplicateFileComparator());
+        }catch(IllegalArgumentException e){
+            Utils.errPrint(e);
+        }
         return this;
     }
 

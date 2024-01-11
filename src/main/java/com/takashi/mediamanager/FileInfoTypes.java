@@ -24,7 +24,7 @@ public class FileInfoTypes {
 
     //final static Integer dbver = 1;
 
-    //public final static boolean OUTPUT_FILE_DUP_DEF = true;
+    public final static boolean OUTPUT_FILE_DUP_DEF = true;
     public final static String OUTPUT_DUPLICATE_FILE_NAME = "D:\\DuplicateFile.txt";
     public final static boolean OUTPUT_METADATA_FILE_DEF = true;
     public final static String OUTPUT_METADATA_FILE_NAME = "D:\\metadata.txt";

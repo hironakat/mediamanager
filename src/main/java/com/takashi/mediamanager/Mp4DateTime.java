@@ -22,7 +22,7 @@ public class Mp4DateTime extends DateTimeBase{
         timeDelimiter = checkDelimiter(datetime);
         try {
             if (timeDelimiter == Character.MIN_VALUE) {
-                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime + "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" " + datetime);
             }
 
             index0 = datetime.indexOf(dateDelimiter);
@@ -39,21 +39,21 @@ public class Mp4DateTime extends DateTimeBase{
             index0 = index1;
             index1 = datetime.indexOf(dateDelimiter, index0 + 1);
             if (index1 == -1) {
-                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+ datetime + "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+ datetime);
             }
             dayOfMonth = Integer.parseInt(datetime.substring(index0 + 1, index1));
 
             index0 = index1;
             index1 = datetime.indexOf(timeDelimiter, index0 + 1);
             if (index1 == -1) {
-                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+ "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+ datetime);
             }
             hour = Integer.parseInt(datetime.substring(index0 + 1, index1));
 
             index0 = index1;
             index1 = datetime.indexOf(timeDelimiter, index0 + 1);
             if (index1 == -1) {
-                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+ "\n");
+                throw new DateDelimiterException(this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+ datetime);
             }
             minute = Integer.parseInt(datetime.substring(index0 + 1, index1));
 
@@ -74,8 +74,7 @@ public class Mp4DateTime extends DateTimeBase{
             Utils.errPrint(path+" "+this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+ datetime);
             //e.printStackTrace();
         } catch (DateDelimiterException e) {
-            Utils.errPrint(path+" "+this.getClass().getName()+" "+Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+ datetime);
-            //e.printStackTrace();
+            Utils.errPrint(path+" "+e);
         }
         if (month < 1 || month > 12 ||
                 dayOfMonth < 1 || dayOfMonth > 31 ||
