@@ -41,7 +41,7 @@ public class FileListUtils extends FileList{
         }
     }
 
-    public void duplicateCheck() {
+    /*public void duplicateCheck() {
         Collections.sort(filelist, new FileInfoComparator());
 
         BufferedWriter duplicatefileout = null;
@@ -103,7 +103,7 @@ public class FileListUtils extends FileList{
                 }
             }
         }
-    }
+    }*/
 
     public void duplicateCheck(FileListUtils filelist2, Utils util) {
         Collections.sort(this.filelist, new FileInfoComparator());
@@ -165,7 +165,7 @@ public class FileListUtils extends FileList{
         }
     }
 
-    public void fileCopy()  {
+    /*public void fileCopy()  {
         Iterator<FileInfo> fileInfoIterator = filelist.iterator();
         String dirName;
         File fileOut;
@@ -202,7 +202,7 @@ public class FileListUtils extends FileList{
             }
             Utils.printProgress("fileCopy");
         }
-    }
+    }*/
 
     public DuplicateFileList getDuplicate(){
         DuplicateFileList duplicateList = new DuplicateFileList();
