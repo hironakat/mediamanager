@@ -5,9 +5,14 @@ import java.util.*;
 
 
 public class FileList {
-    protected final static List<FileInfo> filelist = new ArrayList<FileInfo>();
+    private final List<FileInfo> filelist = Collections.synchronizedList(new ArrayList<FileInfo>());
 
     public void add(FileInfo fileinfo){
-        filelist.add(fileinfo);
+        synchronized(filelist){
+            filelist.add(fileinfo);
+        }
     }
+
+    public List<FileInfo> getFileList() { return filelist; }
+
 }
