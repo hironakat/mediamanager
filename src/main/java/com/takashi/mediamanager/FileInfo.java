@@ -99,7 +99,6 @@ public class FileInfo {
     public String getPath(){
         String path = null;
         //String folderName;
-
         if(getFileType().getMimeType() != null){
             if(!duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)) {
                 path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + getFolderName()+"\\"+fileName;
@@ -120,6 +119,9 @@ public class FileInfo {
             }else{
                 path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName() + "\\" + fileName;
             }
+        }
+        if(path == null){
+            Utils.errPrint(getFileObj().getPath()+" "+getFileType()+" "+getFileType().getMimeType()+" "+duplicate);
         }
         return path;
     }
