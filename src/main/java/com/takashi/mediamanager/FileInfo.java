@@ -120,9 +120,6 @@ public class FileInfo {
                 path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.VideoDir + "\\" + FileInfoTypes.DuplicateDir + "\\" + getFolderName() + "\\" + fileName;
             }
         }
-        if(path == null){
-            Utils.errPrint(getFileObj().getPath()+" "+getFileType()+" "+getFileType().getMimeType()+" "+duplicate);
-        }
         return path;
     }
     private String getFolderName(){
