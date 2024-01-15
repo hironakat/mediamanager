@@ -95,7 +95,7 @@ public class GetFileInfo {
                     }
                 }
             }
-            if(fileInfo.getDateTimeTakenLocalDateTime() == LocalDateTime.MIN){
+            if(fileInfo.getDateTimeTakenLocalDateTime().equals(LocalDateTime.MIN)){
                 //System.err.println("Date Taken is empty "+file.toPath());
                 //print(metadata, file);
                 String path = fileInfo.getFileObj().getPath();
@@ -106,8 +106,11 @@ public class GetFileInfo {
             print(metadata, file);
             return fileInfo;
         } catch (ImageProcessingException | IOException e) {
-            System.err.println("\n"+file.toPath());
-            Utils.errPrint(e);
+            Utils.errPrint("\n"+file.toPath(), e);
+            String path = fileInfo.getFileObj().getPath();
+            path = path.replace(FileInfoTypes.RootDir+"\\","");
+            path = path.replace("\\"+fileInfo.getFileName(),"");
+            fileInfo.setParentDir(path);
             return fileInfo;
         }
     }

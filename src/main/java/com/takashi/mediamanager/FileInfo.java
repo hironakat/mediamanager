@@ -126,9 +126,6 @@ public class FileInfo {
         String returnValue;
         if(!dateTaken.toLocalDate().toString().equals(LocalDate.MIN.toString())) {
             returnValue = dateTaken.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            if(returnValue == null){
-                System.err.println(Thread.currentThread().getStackTrace()[1].getMethodName()+" "+Thread.currentThread().getStackTrace()[1].getLineNumber()+" "+dateTaken.toLocalDate().toString());
-            }
         }else{
             returnValue = parentDir;
         }
