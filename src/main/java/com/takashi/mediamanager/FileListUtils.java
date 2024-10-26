@@ -58,8 +58,9 @@ public class FileListUtils extends FileList{
                     if (originalFile.getFileSize() == targetFile.getFileSize()) {
                         try {
                             if (java.nio.file.Files.mismatch(originalFile.getFileObj().toPath(), targetFile.getFileObj().toPath()) == -1L) {
-                                targetFile.setDuplicate(true);
-                                targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
+                                dupFileNameCheck(originalFile, targetFile);
+                                /*targetFile.setDuplicate(true);
+                                targetFile.setDuplicateOriginalFile(originalFile.getFileObj());*/
                             }
                         } catch (IOException e) {
                             Utils.errPrint(this.getClass().getName() + " " + Thread.currentThread().getStackTrace()[1].getMethodName() + " " + Thread.currentThread().getStackTrace()[1].getLineNumber());
@@ -278,6 +279,21 @@ public class FileListUtils extends FileList{
                     }
                 }
             }
+        }
+    }
+    private void dupFileNameCheck(FileInfo originalFile, FileInfo targetFile){
+        String originalFileName, targetFilename;
+        originalFileName = originalFile.getFileName();
+        targetFilename = targetFile.getFileName();
+        if(targetFile.getFileName().contains("Copy") || targetFile.getFileName().contains("copy")){
+            targetFile.setDuplicate(true);
+            targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
+        }else if(originalFile.getFileName().contains("Copy") || originalFile.getFileName().contains("copy")) {
+            originalFile.setDuplicate(true);
+            originalFile.setDuplicateOriginalFile(targetFile.getFileObj());
+        }else{
+            targetFile.setDuplicate(true);
+            targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
         }
     }
 }
