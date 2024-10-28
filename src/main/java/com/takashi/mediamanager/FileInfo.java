@@ -99,7 +99,6 @@ public class FileInfo {
     public String getPath(){
         String path = null;
         //String folderName;
-
         if(getFileType().getMimeType() != null){
             if(!duplicate && getFileType().getMimeType().contains(FileInfoTypes.imageMimeTag)) {
                 path = FileInfoTypes.OutputDir + "\\" + FileInfoTypes.ImageDir + "\\" + getFolderName()+"\\"+fileName;

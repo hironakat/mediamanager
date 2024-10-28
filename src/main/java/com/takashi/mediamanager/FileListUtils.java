@@ -22,9 +22,9 @@ public class FileListUtils extends FileList{
 
 
     public void mkdir (){
-        Iterator<FileInfo> fileInfoIterator = getFileList().iterator();
         List<FileDateDupflag> datelist = new ArrayList<FileDateDupflag>();
-        synchronized(getFileList()) {
+        synchronized (getFileList()) {
+            Iterator<FileInfo> fileInfoIterator = getFileList().iterator();
             while (fileInfoIterator.hasNext()) {
                 FileInfo fi = fileInfoIterator.next();
                 FileDateDupflag fileDateDupflag = new FileDateDupflag(fi);

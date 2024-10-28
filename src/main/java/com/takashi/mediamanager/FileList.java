@@ -13,6 +13,6 @@ public class FileList {
         }
     }
 
-    public List<FileInfo> getFileList() { return filelist; }
+    protected List<FileInfo> getFileList() { return filelist; }
 
 }
