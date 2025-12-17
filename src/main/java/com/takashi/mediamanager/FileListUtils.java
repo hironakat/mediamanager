@@ -43,171 +43,116 @@ public class FileListUtils extends FileList{
         }
     }
 
-    /*public void duplicateCheck() {
-        Collections.sort(filelist, new FileInfoComparator());
+    public void duplicateCheck() {
+        synchronized (getFileList()) {
+            Collections.sort(getFileList(), new FileInfoComparator());
+            BufferedWriter duplicatefileout = null;
+            //List<String> targetFileNameVariation = new ArrayList<String>();
 
-        BufferedWriter duplicatefileout = null;
-
-        ListIterator<FileInfo> fileInfoIterator = filelist.listIterator(0);
-        ListIterator<FileInfo> fileInfoIteratorCheck;
-        //List<String> targetFileNameVariation = new ArrayList<String>();
-
-        while (fileInfoIterator.hasNext()) {
-            FileInfo originalFile = fileInfoIterator.next();
-            fileInfoIteratorCheck = filelist.listIterator(fileInfoIterator.nextIndex());
-            fileInfoIteratorCheck.forEachRemaining(targetFile -> {
-                if (originalFile.getFileSize() == targetFile.getFileSize()) {
-                    try {
-                        if (java.nio.file.Files.mismatch(originalFile.getFileObj().toPath(), targetFile.getFileObj().toPath()) == -1L) {
-                            targetFile.setDuplicate(true);
-                            targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
+            ListIterator<FileInfo> fileInfoIterator = getFileList().listIterator(0);
+            ListIterator<FileInfo> fileInfoIteratorCheck;
+            while (fileInfoIterator.hasNext()) {
+                FileInfo originalFile = fileInfoIterator.next();
+                fileInfoIteratorCheck = getFileList().listIterator(fileInfoIterator.nextIndex());
+                fileInfoIteratorCheck.forEachRemaining(targetFile -> {
+                    if (originalFile.getFileSize() == targetFile.getFileSize()) {
+                        try {
+                            if (java.nio.file.Files.mismatch(originalFile.getFileObj().toPath(), targetFile.getFileObj().toPath()) == -1L) {
+                                dupFileNameCheck(originalFile, targetFile);
+                                /*targetFile.setDuplicate(true);
+                                targetFile.setDuplicateOriginalFile(originalFile.getFileObj());*/
+                            }
+                        } catch (IOException e) {
+                            Utils.errPrint(this.getClass().getName() + " " + Thread.currentThread().getStackTrace()[1].getMethodName() + " " + Thread.currentThread().getStackTrace()[1].getLineNumber());
+                            Utils.errPrint((originalFile.getFileObj().getPath()));
+                            Utils.errPrint((targetFile.getFileObj().getPath()));
+                            Utils.errPrint(e);
                         }
-                    } catch (IOException e) {
-                        Utils.errPrint(this.getClass().getName() + " " + Thread.currentThread().getStackTrace()[1].getMethodName() + " " + Thread.currentThread().getStackTrace()[1].getLineNumber());
-                        Utils.errPrint((originalFile.getFileObj().getPath()));
-                        Utils.errPrint((targetFile.getFileObj().getPath()));
-                        Utils.errPrint(e);
                     }
-                }
-            });
+                });
 
-            Utils.printProgress("duplicateCheck");
-        }
+                Utils.printProgress("duplicateCheck");
+            }
 
-        if (FileInfoTypes.OUTPUT_FILE_DUP_DEF) {
-            try {
-                FileWriter duplicateFileOutput = new FileWriter(FileInfoTypes.OUTPUT_DUPLICATE_FILE_NAME, true); //true tells to append data.
-                duplicatefileout = new BufferedWriter(duplicateFileOutput);
-            } catch (IOException e) {
-                Utils.errPrint(e);
-            }
-        }
-        fileInfoIterator = filelist.listIterator(0);
-        while (fileInfoIterator.hasNext()) {
-            FileInfo data = fileInfoIterator.next();
-            if (data.getDuplicate()) {
-                //System.out.println(data.getFileName() + " " + data.getDuplicate() + " " + data.getNonPictureFile());
-                if (FileInfoTypes.OUTPUT_FILE_DUP_DEF) {
-                    try {
-                        duplicatefileout.write(data.getFilePath() + " " + data.getDuplicateOriginalFile().getPath() + "\r\n");
-                    } catch (IOException e) {
-                        Utils.errPrint(e);
-                    }
-                }
-            }
-        }
-        if (FileInfoTypes.OUTPUT_FILE_DUP_DEF) {
-            if (duplicatefileout != null) {
+            if (FileInfoTypes.OUTPUT_FILE_DUP_DEF) {
                 try {
-                    duplicatefileout.close();
+                    FileWriter duplicateFileOutput = new FileWriter(FileInfoTypes.OUTPUT_DUPLICATE_FILE_NAME, true); //true tells to append data.
+                    duplicatefileout = new BufferedWriter(duplicateFileOutput);
                 } catch (IOException e) {
                     Utils.errPrint(e);
                 }
             }
-        }
-    }*/
-
-    public void duplicateCheck(FileListUtils filelist2, Utils util) {
-        ListIterator<FileInfo> fileInfoIterator1;
-        ListIterator<FileInfo> fileInfoIterator2;
-        BufferedWriter junkoDupfileout = null;
-
-        try {
-            FileWriter duplicateFileOutputFile = new FileWriter(FileInfoTypes.OUTPUT_DUPLICATE_FILE_NAME, true); //true tells to append data.
-            junkoDupfileout = new BufferedWriter(duplicateFileOutputFile);
-        }catch (IOException e) {
-            Utils.errPrint(e);
-        }
-
-        synchronized(this.getFileList()) {
-            Collections.sort(this.getFileList(), new FileInfoComparator());
-            fileInfoIterator1 = this.getFileList().listIterator(0);
-            synchronized (filelist2.getFileList()) {
-                Collections.sort(filelist2.getFileList(), new FileInfoComparator());
-                fileInfoIterator2 = filelist2.getFileList().listIterator(0);
-                while (fileInfoIterator2.hasNext()) {
-                    FileInfo targetFile = fileInfoIterator2.next();
-                    while (fileInfoIterator1.hasNext()) {
-                        FileInfo originalFile = fileInfoIterator1.next();
-                        if (originalFile.getFileName().equals(targetFile.getFileName())) {
-                            try {
-                                //if (Files.equal(originalFile.getFileObj(), targetFile.getFileObj())) {
-                                if (Files.mismatch(originalFile.getFileObj().toPath(), targetFile.getFileObj().toPath()) == -1L) {
-                                    targetFile.setDuplicate(true);
-                                    targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
-                                    //System.out.print("targetFile " + targetFile.getFilePath()+"\n");
-                                    try {
-                                        junkoDupfileout.write(targetFile.getFilePath() + "\r\n");
-                                    } catch (IOException e) {
-                                        Utils.errPrint(e);
-                                    }
-                                    continue;
-                                }
-                            } catch (IOException e) {
-                                Utils.errPrint(e);
-                            }
+            fileInfoIterator = getFileList().listIterator(0);
+            while (fileInfoIterator.hasNext()) {
+                FileInfo data = fileInfoIterator.next();
+                if (data.getDuplicate()) {
+                    //System.out.println(data.getFileName() + " " + data.getDuplicate() + " " + data.getNonPictureFile());
+                    if (FileInfoTypes.OUTPUT_FILE_DUP_DEF) {
+                        try {
+                            duplicatefileout.write(data.getFilePath() + " " + data.getDuplicateOriginalFile().getPath() + "\r\n");
+                        } catch (IOException e) {
+                            Utils.errPrint(e);
                         }
                     }
-                    Collections.sort(this.getFileList(), new FileInfoComparator());
-                    fileInfoIterator1 = this.getFileList().listIterator(0);
-                    util.printProgress("duplicateCheck");
                 }
             }
-        }
-
-
-        if (junkoDupfileout != null) {
-            try {
-                junkoDupfileout.close();
-            }catch(IOException e){
-                Utils.errPrint(e);
+            if (FileInfoTypes.OUTPUT_FILE_DUP_DEF) {
+                if (duplicatefileout != null) {
+                    try {
+                        duplicatefileout.close();
+                    } catch (IOException e) {
+                        Utils.errPrint(e);
+                    }
+                }
             }
         }
     }
 
-    /*public void fileCopy()  {
-        Iterator<FileInfo> fileInfoIterator = filelist.iterator();
-        String dirName;
-        File fileOut;
-        while (fileInfoIterator.hasNext()) {
-            FileInfo originalFile = fileInfoIterator.next();
-            try {
-                fileOut = new File(originalFile.getPath());
-            }catch(NullPointerException e){
-                Utils.errPrint(originalFile.getFileObj().getPath(), e);
-                if(originalFile.getFileType().getMimeType()!=null){
-                    Utils.errPrint(originalFile.getDuplicate()+" "+originalFile.getFileType().getMimeType()+" "+originalFile.getPath());
-                }else{
-                    Utils.errPrint(originalFile.getDuplicate()+" getMimeType NULL");
-                }
-                return;
-            }
-            if(!fileOut.exists()) {
+    public void fileCopy()  {
+        synchronized (getFileList()) {
+            Iterator<FileInfo> fileInfoIterator = getFileList().iterator();
+            String dirName;
+            File fileOut;
+            while (fileInfoIterator.hasNext()) {
+                FileInfo originalFile = fileInfoIterator.next();
                 try {
-                    FileChannel orgFile = new FileInputStream(originalFile.getFileObj()).getChannel();
-                    FileChannel destFile = new FileOutputStream(fileOut).getChannel();
-
-                    orgFile.transferTo(0, orgFile.size(), destFile);
-                    originalFile.setDestination(fileOut);
-                    originalFile.setFileCopied(true);
-                    destFile.close();
-                    orgFile.close();
-                }catch(IOException e){
-
-                    Utils.errPrint(e);
+                    fileOut = new File(originalFile.getPath());
+                } catch (NullPointerException e) {
+                    Utils.errPrint(originalFile.getFileObj().getPath(), e);
+                    if (originalFile.getFileType().getMimeType() != null) {
+                        Utils.errPrint(originalFile.getDuplicate() + " " + originalFile.getFileType().getMimeType() + " " + originalFile.getPath());
+                    } else {
+                        Utils.errPrint(originalFile.getDuplicate() + " getMimeType NULL");
+                    }
+                    return;
                 }
-            }else{
-                originalFile.setDestination(fileOut);
-                originalFile.setDestFileExist(true);
+                if (!fileOut.exists()) {
+                    try {
+                        FileChannel orgFile = new FileInputStream(originalFile.getFileObj()).getChannel();
+                        FileChannel destFile = new FileOutputStream(fileOut).getChannel();
+
+                        orgFile.transferTo(0, orgFile.size(), destFile);
+                        originalFile.setDestination(fileOut);
+                        originalFile.setFileCopied(true);
+                        destFile.close();
+                        orgFile.close();
+                    } catch (IOException e) {
+
+                        Utils.errPrint(e);
+                    }
+                } else {
+                    originalFile.setDestination(fileOut);
+                    originalFile.setDestFileExist(true);
+                }
+                Utils.printProgress("fileCopy");
             }
-            Utils.printProgress("fileCopy");
         }
-    }*/
+    }
 
     public DuplicateFileList getDuplicate(){
         DuplicateFileList duplicateList = new DuplicateFileList();
-        ListIterator<FileInfo> fileInfoIterator = this.getFileList().listIterator(0);
-        synchronized(this.getFileList()) {
+        synchronized (getFileList()) {
+            ListIterator<FileInfo> fileInfoIterator = getFileList().listIterator(0);
             while (fileInfoIterator.hasNext()) {
                 FileInfo data = fileInfoIterator.next();
                 if (data.getDuplicate()) {
@@ -248,23 +193,11 @@ public class FileListUtils extends FileList{
     }*/
 
     public void print(){
-        ListIterator<FileInfo> fileInfoIterator = this.getFileList().listIterator(0);
-        //FileListDB db = new FileListDB();
-        synchronized(this.getFileList()) {
+        synchronized (getFileList()) {
+            ListIterator<FileInfo> fileInfoIterator = getFileList().listIterator(0);
+            //FileListDB db = new FileListDB();
             fileInfoIterator.forEachRemaining(filelist -> {
                 System.out.println(filelist.getDateTaken().toString() + " " + filelist.getFileName() + " " + filelist.getDuplicate());
-            });
-        }
-    }
-
-    public void printDup(){
-        ListIterator<FileInfo> fileInfoIterator = this.getFileList().listIterator(0);
-        //FileListDB db = new FileListDB();
-        synchronized(this.getFileList()) {
-            fileInfoIterator.forEachRemaining(filelist -> {
-                if (filelist.getDuplicate()) {
-                    System.out.println(filelist.getDateTaken().toString() + " " + filelist.getFileName());
-                }
             });
         }
     }
@@ -273,31 +206,29 @@ public class FileListUtils extends FileList{
         return db.getFileInfoDBexist();
     }*/
 
-    public long countNumberOfNonPictureFiles(){
-        synchronized(this.getFileList()) {
-            return this.getFileList().stream().filter(fl -> fl.getNonPictureFile()).count();
-        }
-    }
+    /*public long countNumberOfNonPictureFiles(){
+        return filelist.stream().filter(fl -> fl.getNonPictureFile()).count();
+    }*/
 
     public long countNumberOfDuplicateFiles(){
-        synchronized(this.getFileList()) {
-            return this.getFileList().stream().filter(fl -> fl.getDuplicate()).count();
+        synchronized (getFileList()) {
+            return getFileList().stream().filter(fl -> fl.getDuplicate()).count();
         }
     }
 
     public long countNumberOfFileCopied(){
-        synchronized(this.getFileList()) {
-            return this.getFileList().stream().filter(fl -> fl.getFileCopied()).count();
+        synchronized (getFileList()) {
+            return getFileList().stream().filter(fl -> fl.getFileCopied()).count();
         }
     }
 
     public long countNumberOfDestFileExist(){
-        synchronized(this.getFileList()) {
-            return this.getFileList().stream().filter(fl -> fl.getDestFileExist()).count();
+        synchronized (getFileList()) {
+            return getFileList().stream().filter(fl -> fl.getDestFileExist()).count();
         }
     }
 
-    /*public long getNumberOfFiles(){
+    public long getNumberOfFiles(){
         long numOfFiles = 0L;
         try {
             Stream<Path> fileList = java.nio.file.Files.walk(Paths.get(FileInfoTypes.RootDir)).filter(java.nio.file.Files::isRegularFile);
@@ -306,11 +237,12 @@ public class FileListUtils extends FileList{
             Utils.errPrint(e);
         }
         return numOfFiles;
-    }*/
+    }
 
     public void handleUnknownFile(){
-        Iterator<FileInfo> fileInfoIterator = this.getFileList().iterator();
-        synchronized(this.getFileList()) {
+        synchronized (getFileList()) {
+            Iterator<FileInfo> fileInfoIterator = getFileList().iterator();
+
             while (fileInfoIterator.hasNext()) {
                 FileInfo fi = fileInfoIterator.next();
                 if (fi.getFileType() == FileType.Unknown) {
@@ -320,7 +252,7 @@ public class FileListUtils extends FileList{
                     if (unknownFileName.contains(" ")) {
                         unknownFileName = unknownFileName.substring(0, unknownFileName.indexOf(' '));
                     }
-                    Iterator<FileInfo> fileInfoIterator2 = this.getFileList().iterator();
+                    Iterator<FileInfo> fileInfoIterator2 = getFileList().iterator();
                     while (fileInfoIterator2.hasNext()) {
                         FileInfo knownFile = fileInfoIterator2.next();
                         if (knownFile.getFileType() != FileType.Unknown &&
@@ -347,6 +279,21 @@ public class FileListUtils extends FileList{
                     }
                 }
             }
+        }
+    }
+    private void dupFileNameCheck(FileInfo originalFile, FileInfo targetFile){
+        String originalFileName, targetFilename;
+        originalFileName = originalFile.getFileName();
+        targetFilename = targetFile.getFileName();
+        if(targetFile.getFileName().contains("Copy") || targetFile.getFileName().contains("copy")){
+            targetFile.setDuplicate(true);
+            targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
+        }else if(originalFile.getFileName().contains("Copy") || originalFile.getFileName().contains("copy")) {
+            originalFile.setDuplicate(true);
+            originalFile.setDuplicateOriginalFile(targetFile.getFileObj());
+        }else{
+            targetFile.setDuplicate(true);
+            targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
         }
     }
 }

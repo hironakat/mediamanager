@@ -13,10 +13,8 @@ public class FileInfoTypes {
     final static String imageMimeTag = "image/";
     final static String Dir_FILE = "File";
 
-    //final static String Dir1 = "D:\\Public Pictures";
-    final static String Dir1 = "D:\\Public Pictures";
-    final static String Dir2 = "D:\\phone";  //This will be output to dup.txt
-    final static String OutputDir = "D:\\Users\\Takashi\\IdeaProjects\\mediamanager\\Output";
+    final static String RootDir = "D:\\phone";  //original folder
+    final static String OutputDir = "D:\\Output";
     final static String DuplicateDir = "duplicate";
     final static String VideoDir = "Public Videos";
     final static String ImageDir = "Public Pictures";
@@ -28,8 +26,8 @@ public class FileInfoTypes {
     public final static String OUTPUT_DUPLICATE_FILE_NAME = "D:\\DuplicateFile.txt";
     public final static boolean OUTPUT_METADATA_FILE_DEF = true;
     public final static String OUTPUT_METADATA_FILE_NAME = "D:\\metadata.txt";
-    //public final static boolean OUTPUT_FILE_COUNT_FILE_DEF = false;
-    //public final static String OUTPUT_FILE_COUNT_FILE_NAME = "D:\\filecount.txt";
+    public final static boolean OUTPUT_FILE_COUNT_FILE_DEF = true;
+    public final static String OUTPUT_FILE_COUNT_FILE_NAME = "D:\\filecount.txt";
     public final static boolean OUTPUT_FILE_INFO_FILE_DEF = true;
     public final static String OUTPUT_FILE_INFO_FILE_NAME = "D:\\fileinfo.txt";
 }

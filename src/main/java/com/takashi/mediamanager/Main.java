@@ -2,9 +2,9 @@ package com.takashi.mediamanager;
 
 
 //import java.io.BufferedInputStream;
-//import java.io.BufferedWriter;
-//import java.io.FileWriter;
-//import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalTime;
@@ -12,44 +12,81 @@ import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
-        Utils util1 = new Utils();
-        Utils util2 = new Utils();
-        Stream<Path> fileList1 = util1.findFiles(FileInfoTypes.Dir1);
-        Stream<Path> fileList2 = util2.findFiles(FileInfoTypes.Dir2);
+        Stream<Path> fileList = Utils.findFiles(FileInfoTypes.RootDir);
 
         GetFileInfo getFileInfoObj = new GetFileInfo();
-        FileListUtils filelistUtil1 = new FileListUtils();
-        FileListUtils filelistUtil2 = new FileListUtils();
+        FileListUtils filelistUtils = new FileListUtils();
         LocalTime start;
         LocalTime finish;
         getFileInfoObj.fileCleanUp();
 
         start = LocalTime.now();
-
-        fileList1.forEach(path -> {
+        fileList.forEach(path -> {
             FileInfo fi = getFileInfoObj.getFileInfo(path.toAbsolutePath().toFile());
             if (fi != null) {
-                filelistUtil1.add(fi);
+                filelistUtils.add(fi);
             }
-            util1.printProgress("FileList1");
+            Utils.printProgress("FileList");
         });
-        fileList2.forEach(path -> {
-            FileInfo fi = getFileInfoObj.getFileInfo(path.toAbsolutePath().toFile());
-            if (fi != null) {
-                filelistUtil2.add(fi);
-            }
-            util2.printProgress("FileList2");
-        });
+        filelistUtils.handleUnknownFile();
         finish = LocalTime.now();
         System.out.println("FileList " + Duration.between(start, finish).getSeconds() + "sec");
 
         start = LocalTime.now();
-
-        filelistUtil1.duplicateCheck(filelistUtil2, util2);
+        filelistUtils.duplicateCheck();
         finish = LocalTime.now();
         System.out.println("duplicateCheck " + Duration.between(start, finish).getSeconds() + "sec");
+        finish = LocalTime.now();
+        System.out.println("duplicateFiles.getFromDB " + Duration.between(start, finish).getSeconds() + "sec");
 
-        filelistUtil1.printDup();
+        start = LocalTime.now();
+        filelistUtils.mkdir();
+        finish = LocalTime.now();
+        System.out.println("mkdir "+ Duration.between(start, finish).getSeconds()+"sec");
+
+        start = LocalTime.now();
+        filelistUtils.fileCopy();
+        finish = LocalTime.now();
+        System.out.println("fileCopy "+ Duration.between(start, finish).getSeconds()+"sec");
+
+        /*start = LocalTime.now();
+        //filelist.setDB();
+        finish = LocalTime.now();
+        System.out.println("setDB " + Duration.between(start, finish).getSeconds() + "sec");*/
+
+        start = LocalTime.now();
+        ListWindow listWindow = new ListWindow();
+        DuplicateFileList duplicateFiles;
+        duplicateFiles = filelistUtils.getDuplicate();
+        if(!duplicateFiles.isEmpty()) {
+            duplicateFiles = duplicateFiles.dupSort();
+            listWindow.setList(duplicateFiles);
+            listWindow.dispList();
+            finish = LocalTime.now();
+            System.out.println("setList " + Duration.between(start, finish).getSeconds() + "sec");
+        }
+        System.out.println("Total Files " + filelistUtils.getNumberOfFiles() + /*" Non picture files "+ filelistUtils.countNumberOfNonPictureFiles() +*/ " Duplicate File "+ filelistUtils.countNumberOfDuplicateFiles()+" File Copied "+ filelistUtils.countNumberOfFileCopied()+"Destination File Exist "+filelistUtils.countNumberOfDestFileExist());
+        //BufferedInputStream bis = null;
+        BufferedWriter notpicturefileout = null;
+        if(FileInfoTypes.OUTPUT_FILE_COUNT_FILE_DEF) {
+            try {
+                FileWriter notpicturefile = new FileWriter(FileInfoTypes.OUTPUT_FILE_COUNT_FILE_NAME, true); //true tells to append data.
+                notpicturefileout = new BufferedWriter(notpicturefile);
+                notpicturefileout.write("Total Files " + filelistUtils.getNumberOfFiles() + /*" Non picture files "+ filelistUtils.countNumberOfNonPictureFiles() +*/ " Duplicate File " + filelistUtils.countNumberOfDuplicateFiles() + " File Copied " + filelistUtils.countNumberOfFileCopied() + " Destination File Exist " + filelistUtils.countNumberOfDestFileExist() + "\r\n");
+            } catch (IOException e) {
+                Utils.errPrint(e);
+            } finally {
+                if (notpicturefileout != null) {
+                    try {
+                        notpicturefileout.close();
+                    } catch (IOException e) {
+                        Utils.errPrint(e);
+                    }
+                }
+            }
+        }
+        //listWindow.close();
     }
+
 }
 

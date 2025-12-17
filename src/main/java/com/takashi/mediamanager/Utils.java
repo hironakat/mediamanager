@@ -14,12 +14,12 @@ import java.util.stream.Stream;
 
 public class Utils {
     private final static List<Path> formerPathList = new ArrayList<Path>();
-    private long numOfFiles = -1, fileCount = 1/*, msgLen = 0*/;
+    private static long numOfFiles = -1, fileCount = 1/*, msgLen = 0*/;
     private static String funcName = null;
-    private String rootPath;
+    private static String rootPath;
     private final static CountWindow cw = new CountWindow();
 
-    public Stream<Path> findFiles(String path) {
+    public static Stream<Path> findFiles(String path) {
         Stream<Path> fileList = null;
         rootPath = path;
 
@@ -166,7 +166,7 @@ public class Utils {
         System.err.println("EXCEPTION: " + str + " ");
     }
 
-    public void printProgress(String str){
+    public static void printProgress(String str){
         if(funcName == null){
             funcName = str;
         } else if(!funcName.equalsIgnoreCase(str)){

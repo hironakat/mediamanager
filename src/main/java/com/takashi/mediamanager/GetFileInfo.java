@@ -61,30 +61,27 @@ public class GetFileInfo {
             for (Directory i : dir) {
                 if(!i.isEmpty()) {
                     ExifSubIFDDirectory exifsub = new ExifSubIFDDirectory();
+                    Mp4Directory mp4 = new Mp4Directory();
+                    QuickTimeMetadataDirectory qt = new QuickTimeMetadataDirectory();
                     if (exifsub.getName().equals(i.getName())) {
                         givenParam[1] = i.getString(ExifDirectoryBase.TAG_DATETIME_ORIGINAL);
                         if (givenParam[1]  != null) {
                             ExifSubDateTime exifDateTime = new ExifSubDateTime(givenParam);
                             fileInfo.set(exifDateTime.stringToDateTime());
                         }
-                    }
-                    Mp4Directory mp4 = new Mp4Directory();
-                    if (mp4.getName().equals(i.getName())) {
+                    }else if (mp4.getName().equals(i.getName())) {
                         givenParam[1] = i.getString(Mp4Directory.TAG_CREATION_TIME);
                         if (givenParam[1]  != null) {
                             Mp4DateTime mp4DateTime = new Mp4DateTime(givenParam);
                             fileInfo.set(mp4DateTime.stringToDateTime());
                         }
-                    }
-                    QuickTimeMetadataDirectory qt = new QuickTimeMetadataDirectory();
-                    if (qt.getName().equals(i.getName())) {
+                    }else if (qt.getName().equals(i.getName())) {
                         givenParam[1] = i.getString(QuickTimeMetadataDirectory.TAG_CREATION_DATE);
                         if (givenParam[1]  != null) {
                             QtDateTime qtDateTime = new QtDateTime(givenParam);
                             fileInfo.set(qtDateTime.stringToDateTime());
                         }
-                    }
-                    if (FileInfoTypes.Dir_FILE.equals(i.getName())) {
+                    }else if (FileInfoTypes.Dir_FILE.equals(i.getName())) {
                         givenParam[1] = i.getString(FileSystemDirectory.TAG_FILE_SIZE);
                         fileInfo.set(Long.valueOf(givenParam[1]));
                         try {
@@ -95,16 +92,22 @@ public class GetFileInfo {
                     }
                 }
             }
-            if(fileInfo.getDateTimeTakenLocalDateTime() == LocalDateTime.MIN){
+            if(fileInfo.getDateTimeTakenLocalDateTime().equals(LocalDateTime.MIN)){
                 //System.err.println("Date Taken is empty "+file.toPath());
-                print(metadata, file);
-                fileInfo.setParentDir(getParentDirName(file, dir));
+                //print(metadata, file);
+                String path = fileInfo.getFileObj().getPath();
+                path = path.replace(FileInfoTypes.RootDir+"\\","");
+                path = path.replace("\\"+fileInfo.getFileName(),"");
+                fileInfo.setParentDir(path);
             }
             print(metadata, file);
             return fileInfo;
         } catch (ImageProcessingException | IOException e) {
-            System.err.println("\n"+file.toPath());
-            Utils.errPrint(e);
+            Utils.errPrint("\n"+file.toPath(), e);
+            String path = fileInfo.getFileObj().getPath();
+            path = path.replace(FileInfoTypes.RootDir+"\\","");
+            path = path.replace("\\"+fileInfo.getFileName(),"");
+            fileInfo.setParentDir(path);
             return fileInfo;
         }
     }
@@ -164,7 +167,7 @@ public class GetFileInfo {
     public void fileCleanUp(){
         fileDelete(Paths.get(FileInfoTypes.OUTPUT_METADATA_FILE_NAME));
         fileDelete(Paths.get(FileInfoTypes.OUTPUT_DUPLICATE_FILE_NAME));
-        //fileDelete(Paths.get(FileInfoTypes.OUTPUT_FILE_COUNT_FILE_NAME));
+        fileDelete(Paths.get(FileInfoTypes.OUTPUT_FILE_COUNT_FILE_NAME));
         fileDelete(Paths.get(FileInfoTypes.OUTPUT_FILE_INFO_FILE_NAME));
     }
     private void fileDelete(Path path){
