@@ -20,6 +20,7 @@ public class FileInfo {
     private Long fileSize;
     private File fileObj;
     private String fileName;
+    private String fileExtension;
     private Boolean duplicate;
     private Boolean noPictureFile;
     private File duplicateOrgFile;
@@ -35,6 +36,7 @@ public class FileInfo {
         fileSize = Long.MIN_VALUE;
         fileObj = null;
         fileName = null;
+        fileExtension = null;
         duplicate = false;
         noPictureFile = false;
         duplicateOrgFile = null;
@@ -51,6 +53,7 @@ public class FileInfo {
         fileSize = fileinfo.fileSize;
         fileObj = fileinfo.fileObj;
         fileName = fileinfo.fileName;
+        fileExtension = fileinfo.fileExtension;
         duplicate = fileinfo.duplicate;
         noPictureFile = fileinfo.noPictureFile;
         duplicateOrgFile = fileinfo.duplicateOrgFile;
@@ -69,6 +72,13 @@ public class FileInfo {
         if(fileObj.getPath().length() > java.lang.Integer.MAX_VALUE)
             throw new FileInfoException(fileObj.getPath().length());
         fileName = fileObj.getName();
+        String fileNameStr = fileName.toString();
+        int lastIndexOfDot = fileNameStr.lastIndexOf('.');
+
+        if (lastIndexOfDot == -1 || lastIndexOfDot == fileNameStr.length() - 1) {
+            fileExtension = null;
+        }
+        fileExtension = fileNameStr.substring(lastIndexOfDot + 1);
         setNonDateDirName();
     }
     protected void setDuplicate(boolean dup){duplicate = dup;}
@@ -82,6 +92,7 @@ public class FileInfo {
 
     public String getFilePath(){return fileObj.getPath();}
     public String getFileName(){return fileName;}
+    public String getFileExtension(){return fileExtension;}
     public File getFileObj(){return fileObj;}
     public LocalDateTime getDateTimeTakenLocalDateTime(){return dateTaken;}
     //public String getDateTimeTaken(){return dateTaken.toString();}
@@ -192,17 +203,23 @@ public class FileInfo {
         int i = path.getNameCount();
         Path dir = path.getName(i-2);
         StringBuffer strbuf = new StringBuffer(dir.toString());
+        //System.err.print("setNonDateDirName " + strbuf.toString() +" length "+ strbuf.length() +"\n");
         Character ch;
-        if(Character.isDigit(strbuf.charAt(1))) {
-            for(i = 0; i< strbuf.length(); i++) {
-                if(i == 4 || i == 7 || i == 10 || i == 13){
-                    ch = strbuf.charAt(i);
-                    if (!ch.equals('-')&&Character.isDigit(ch)) {
-                        strbuf.insert(i, '-');
+        if(strbuf.length() < 2){
+            nonDateDirName = "NoName";
+        }
+        else {
+            if (Character.isDigit(strbuf.charAt(1))) {
+                for (i = 0; i < strbuf.length(); i++) {
+                    if (i == 4 || i == 7 || i == 10 || i == 13) {
+                        ch = strbuf.charAt(i);
+                        if (!ch.equals('-') && Character.isDigit(ch)) {
+                            strbuf.insert(i, '-');
+                        }
                     }
                 }
             }
+            nonDateDirName = strbuf.toString();
         }
-        nonDateDirName = strbuf.toString();
     }
 }

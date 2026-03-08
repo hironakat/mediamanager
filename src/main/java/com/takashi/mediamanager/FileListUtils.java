@@ -112,11 +112,18 @@ public class FileListUtils extends FileList{
         synchronized (getFileList()) {
             Iterator<FileInfo> fileInfoIterator = getFileList().iterator();
             String dirName;
-            File fileOut;
+            File fileOut = null;
             while (fileInfoIterator.hasNext()) {
                 FileInfo originalFile = fileInfoIterator.next();
                 try {
-                    fileOut = new File(originalFile.getPath());
+                    if(originalFile.getFileType() == FileType.Jpeg &&
+                        originalFile.getFileExtension() != null &&
+                        originalFile.getFileExtension().equalsIgnoreCase("THM")){
+                        fileOut = new File(replaceWithNewExt(originalFile.getPath()));
+                    }
+                    else {
+                        fileOut = new File(originalFile.getPath());
+                    }
                 } catch (NullPointerException e) {
                     Utils.errPrint(originalFile.getFileObj().getPath(), e);
                     if (originalFile.getFileType().getMimeType() != null) {
@@ -143,6 +150,7 @@ public class FileListUtils extends FileList{
                 } else {
                     originalFile.setDestination(fileOut);
                     originalFile.setDestFileExist(true);
+                    System.out.println("filecopy 4 " + fileOut.getPath());
                 }
                 Utils.printProgress("fileCopy");
             }
@@ -248,24 +256,28 @@ public class FileListUtils extends FileList{
                 if (fi.getFileType() == FileType.Unknown) {
                     String unknownFileDir = fi.getFileObj().getParent();
                     String unknownFileName = fi.getFileObj().getName();
-                    unknownFileName = unknownFileName.substring(0, unknownFileName.indexOf('.'));
-                    if (unknownFileName.contains(" ")) {
-                        unknownFileName = unknownFileName.substring(0, unknownFileName.indexOf(' '));
+                    if (unknownFileName.contains(".")) {
+                        unknownFileName = unknownFileName.substring(0, unknownFileName.indexOf('.'));
+                        if (unknownFileName.contains(" ")) {
+                            unknownFileName = unknownFileName.substring(0, unknownFileName.indexOf(' '));
+                        }
                     }
                     Iterator<FileInfo> fileInfoIterator2 = getFileList().iterator();
                     while (fileInfoIterator2.hasNext()) {
                         FileInfo knownFile = fileInfoIterator2.next();
-                        if (knownFile.getFileType() != FileType.Unknown &&
-                                knownFile.getFileObj().getParent().equalsIgnoreCase(unknownFileDir) &&
-                                knownFile.getFileObj().getName().substring(0, knownFile.getFileObj().getName().indexOf('.')).equalsIgnoreCase(unknownFileName) &&
-                                !knownFile.getFileObj().getPath().equalsIgnoreCase(fi.getFileObj().getPath())) {
-                            //System.err.println("match " + fi.getFileObj().getPath() + " " + knownFile.getFileObj().getPath());
-                            fi.set(knownFile.getDateTimeTakenLocalDateTime());
-                            fi.setFileType(knownFile.getFileType());
-                            fi.setNonPictureFile(knownFile.getNonPictureFile());
-                            fi.setFileType(knownFile.getFileType());
-                            fi.set(knownFile.getDateTimeTakenLocalDateTime());
-                            fi.set(fi.getFileObj().length());
+                        if (knownFile.getFileObj().getName().contains(".")) {
+                            if (knownFile.getFileType() != FileType.Unknown &&
+                                    knownFile.getFileObj().getParent().equalsIgnoreCase(unknownFileDir) &&
+                                    knownFile.getFileObj().getName().substring(0, knownFile.getFileObj().getName().indexOf('.')).equalsIgnoreCase(unknownFileName) &&
+                                    !knownFile.getFileObj().getPath().equalsIgnoreCase(fi.getFileObj().getPath())) {
+                                //System.err.println("match " + fi.getFileObj().getPath() + " " + knownFile.getFileObj().getPath());
+                                fi.set(knownFile.getDateTimeTakenLocalDateTime());
+                                fi.setFileType(knownFile.getFileType());
+                                fi.setNonPictureFile(knownFile.getNonPictureFile());
+                                fi.setFileType(knownFile.getFileType());
+                                fi.set(knownFile.getDateTimeTakenLocalDateTime());
+                                fi.set(fi.getFileObj().length());
+                            }
                         }
                     }
                     if (fi.getFileType() == FileType.Unknown) {
@@ -295,5 +307,28 @@ public class FileListUtils extends FileList{
             targetFile.setDuplicate(true);
             targetFile.setDuplicateOriginalFile(originalFile.getFileObj());
         }
+    }
+
+    private String replaceWithNewExt(String originalPathString){
+        // Original file path
+        Path originalPath = Paths.get(originalPathString);
+        String newExtension = ".JPG";
+
+        // Get the file name as a Path object
+        Path fileName = originalPath.getFileName();
+
+        // Remove the existing extension from the file name
+        // This is done by getting the file name as a string, finding the last dot, and taking the substring before it
+        String fileNameWithoutExtension = fileName.toString();
+        int dotIndex = fileNameWithoutExtension.lastIndexOf('.');
+        if (dotIndex != -1) {
+            fileNameWithoutExtension = fileNameWithoutExtension.substring(0, dotIndex);
+        }
+
+        // Create the new file name with the desired extension
+        String newFileName = fileNameWithoutExtension + newExtension;
+
+        // Resolve the new file name with the parent directory to get the final path
+        return originalPath.resolveSibling(newFileName).toString();
     }
 }
