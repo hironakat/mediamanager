@@ -13,12 +13,15 @@ public class FileInfoTypes {
     final static String imageMimeTag = "image/";
     final static String Dir_FILE = "File";
 
-    final static String RootDir = "D:\\phone";  //original folder
-    final static String OutputDir = "D:\\Output";
-    final static String DuplicateDir = "duplicate";
-    final static String VideoDir = "Public Videos";
-    final static String ImageDir = "Public Pictures";
-    final static String DateUnknownDir = "DateUnknown";
+    // These six are user-configurable via ConfigWindow at startup.
+    // The literals here are only the fallback defaults used the very
+    // first time the app runs (before anything has been saved).
+    public static String RootDir = "D:\\phone";  //original folder
+    public static String OutputDir = "D:\\Output";
+    public static String DuplicateDir = "duplicate";
+    public static String VideoDir = "Public Videos";
+    public static String ImageDir = "Public Pictures";
+    public static String DateUnknownDir = "DateUnknown";
 
     //final static Integer dbver = 1;
 

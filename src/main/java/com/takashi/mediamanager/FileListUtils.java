@@ -150,7 +150,7 @@ public class FileListUtils extends FileList{
                 } else {
                     originalFile.setDestination(fileOut);
                     originalFile.setDestFileExist(true);
-                    System.out.println("filecopy 4 " + fileOut.getPath());
+                    //System.out.println("filecopy 4 " + fileOut.getPath());
                 }
                 Utils.printProgress("fileCopy");
             }

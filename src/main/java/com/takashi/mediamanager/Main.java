@@ -12,6 +12,12 @@ import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
+        ConfigWindow configWindow = new ConfigWindow();
+        if (!configWindow.showDialog()) {
+            // User cancelled / closed the configuration window.
+            return;
+        }
+
         Stream<Path> fileList = Utils.findFiles(FileInfoTypes.RootDir);
 
         GetFileInfo getFileInfoObj = new GetFileInfo();
